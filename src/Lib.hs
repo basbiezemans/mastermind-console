@@ -6,8 +6,8 @@ import Data.Maybe
 type Counter = Int
 type Limit = Int
 type Player = Int
-type Code = [Int]
 type Hint = [Int]
+type Code = (Int, Int, Int, Int)
 
 data Result = Correct
             | InCorrect
@@ -58,14 +58,26 @@ isCorrect :: Result -> Bool
 isCorrect Correct   = True
 isCorrect InCorrect = False
 
-hint :: Code -> Code -> Hint
-hint xs ys = ones ++ zeros (fst pair) (snd pair)
+codeToList :: Code -> [Int]
+codeToList (a,b,c,d) = a : b : c : [d]
+
+listToCode :: [Int] -> Maybe Code
+listToCode (a:b:c:d:_) = Just (a, b, c, d)
+listToCode _ = Nothing
+
+-- Take two codes and return a pair if Int-lists with all matching digits removed
+remMatches :: Code -> Code -> ([Int], [Int])
+remMatches c1 c2 = remMatches' (codeToList c1, codeToList c2) 4
     where
-        -- Reduce (xs, ys) to a pair with all correct digits removed
-        reducer ((x:xs), (y:ys)) _
-            | x == y    = (xs, ys)
-            | otherwise = (xs ++ [x], ys ++ [y])
-        pair = foldl reducer (xs, ys) [0..3]
+        remMatches' pair 0 = pair
+        remMatches' ((x:xs), (y:ys)) n
+            | x == y       = remMatches' (xs, ys) (n - 1)
+            | otherwise    = remMatches' (xs ++ [x], ys ++ [y]) (n - 1)
+
+hint :: Code -> Code -> Hint
+hint c1 c2 = ones ++ zeros (fst pair) (snd pair)
+    where
+        pair = remMatches c1 c2
         len = 4 - (length $ fst pair)
         ones = replicate len 1
         zeros [] _      = []
@@ -86,13 +98,13 @@ update game Correct   = addCodeBreakerPoint game
 update game InCorrect = if endOf game then addCodeMakerPoint game else game
 
 fromInput :: String -> Maybe Code
-fromInput xs = if isValid code then Just code else Nothing
+fromInput str = if isValid guess then listToCode guess else Nothing
     where
-        code = strToCode xs
+        guess = strToIntList str
         valid x = 0 < x && x < 7
         isValid xs = (length xs) == 4 && all valid xs
 
-strToCode :: String -> Code
-strToCode []                 = []
-strToCode (x:xs) | isDigit x = [digitToInt x] ++ strToCode xs
-                 | otherwise = strToCode xs
+strToIntList :: String -> [Int]
+strToIntList []                 = []
+strToIntList (x:xs) | isDigit x = digitToInt x : strToIntList xs
+                    | otherwise = strToIntList xs

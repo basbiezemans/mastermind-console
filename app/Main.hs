@@ -19,13 +19,10 @@ import Lib
 
 main :: IO ()
 main = do
-    -- Generate a random 4 digit code, where each
-    -- digit is between 1 and 6
-    code <- mapM genRandomDigit $ replicate 4 (1,6)
-    -- Maximum number of turns 
-    let limit = 10
     putStrLn "A new game has been created. Good luck!"
-    play $ newGame code limit
+    -- Create a new game with a maximum of 10 turns 
+    code <- generateCode
+    play $ newGame code 10
 
 newline :: IO ()
 newline = putChar '\n'
@@ -34,6 +31,15 @@ genRandomDigit :: (Int,Int) -> IO Int
 genRandomDigit range = do
     i <- randomRIO range
     return (i)
+
+-- Generate a random 4 digit code, where each digit is between 1 and 6
+generateCode :: IO Code
+generateCode = do
+    a <- genRandomDigit (1,6)
+    b <- genRandomDigit (1,6)
+    c <- genRandomDigit (1,6)
+    d <- genRandomDigit (1,6)
+    return (a, b, c, d)
 
 play :: Game -> IO ()
 play game = do
@@ -69,6 +75,6 @@ play game = do
             putStrLn (show $ hint code pattern)
             if counter == 5 then do
                 putStr "Hint: the sum of the digits in the code is "
-                putStrLn (show $ sum pattern)
+                putStrLn (show $ sum $ codeToList pattern)
             else return ()
             play $ incCounter game
