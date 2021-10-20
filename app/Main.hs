@@ -22,9 +22,8 @@ import Code
 main :: IO ()
 main = do
     putStrLn "A new game has been created. Good luck!"
-    -- Create a new game with a maximum of 10 turns 
     code <- generateCode
-    play $ makeGame code 10
+    play $ makeGame code $ Limit 10
 
 newline :: IO ()
 newline = putChar '\n'
@@ -34,7 +33,7 @@ genRandomDigit range = do
     i <- randomRIO range
     return (i)
 
--- Generate a random 4 digit code, where each digit is between 1 and 6
+-- | Generate a random 4 digit code, where each digit is between 1 and 6
 generateCode :: IO Code
 generateCode = do
     a <- genRandomDigit (1,6)
@@ -60,7 +59,7 @@ play game = do
         if isCorrect result || endOf game then do
             case result of
                 Correct   -> putStrLn "You won!"
-                InCorrect -> putStrLn $ "You lost. The code was " ++ (show code)
+                InCorrect -> putStrLn $ "You lost. The answer was " ++ (show pattern)
             newline
             putStr "Would you like to play again? (Y/n) (default is Y): "
             hFlush stdout
@@ -70,12 +69,12 @@ play game = do
                 'n' -> newline
                 _   -> main
         else do
-            let counter = getCounter game
+            let count = unCounter $ getCounter game
             putStr "Turn: #"
-            putStrLn (show counter)
+            putStrLn (show count)
             putStr "Hint: "
             putStrLn (show $ hint code pattern)
-            if counter == 5 then do
+            if count == 5 then do
                 putStr "Hint: the sum of the digits in the code is "
                 putStrLn (show $ sum $ codeToList pattern)
             else return ()

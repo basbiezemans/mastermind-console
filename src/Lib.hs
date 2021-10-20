@@ -13,23 +13,29 @@ data Result = Correct
 getPattern :: Game -> Code
 getPattern = pattern
 
-getLimit :: Game -> Counter
+getLimit :: Game -> Limit
 getLimit = limit
 
 getCounter :: Game -> Counter
 getCounter = counter
 
-getScore :: Game -> (Player, Player)
+getScore :: Game -> (CodeMaker, CodeBreaker)
 getScore game = (maker game, breaker game)
 
 incCounter :: Game -> Game
 incCounter game = game { counter = inc $ counter game }
+    where
+        inc (Counter x) = Counter (succ x)
 
 addCodeMakerPoint :: Game -> Game
 addCodeMakerPoint game = game { maker = inc $ maker game }
+    where
+        inc (CodeMaker x) = CodeMaker (succ x)
 
 addCodeBreakerPoint :: Game -> Game
 addCodeBreakerPoint game = game { breaker = inc $ breaker game }
+    where
+        inc (CodeBreaker x) = CodeBreaker (succ x)
 
 resultOf :: Code -> Code -> Result
 resultOf c1 c2 = if c1 == c2 then Correct else InCorrect
@@ -64,11 +70,8 @@ hint c1 c2 = ones ++ zeros (fst pair) (snd pair)
             where
                 remove e xs = filter (/= e) xs
 
-inc :: Int -> Int
-inc = (+ 1)
-
 endOf :: Game -> Bool
-endOf game = limit game == counter game
+endOf game = unLimit (limit game) == unCounter (counter game)
 
 update :: Game -> Result -> Game
 update game Correct   = addCodeBreakerPoint game
