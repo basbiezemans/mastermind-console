@@ -39,7 +39,7 @@ generateCode = do
     b <- genRandomDigit (1,6)
     c <- genRandomDigit (1,6)
     d <- genRandomDigit (1,6)
-    return (a, b, c, d)
+    return (Code a b c d)
 
 play :: Game -> IO ()
 play game = do

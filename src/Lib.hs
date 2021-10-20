@@ -7,7 +7,9 @@ type Counter = Int
 type Limit = Int
 type Player = Int
 type Hint = [Int]
-type Code = (Int, Int, Int, Int)
+
+data Code = Code Int Int Int Int
+            deriving (Eq, Show)
 
 data Result = Correct
             | InCorrect
@@ -52,20 +54,20 @@ addCodeBreakerPoint :: Game -> Game
 addCodeBreakerPoint game = game { breaker = inc $ breaker game }
 
 resultOf :: Code -> Code -> Result
-resultOf xs ys = if xs == ys then Correct else InCorrect
+resultOf c1 c2 = if c1 == c2 then Correct else InCorrect
 
 isCorrect :: Result -> Bool
 isCorrect Correct   = True
 isCorrect InCorrect = False
 
 codeToList :: Code -> [Int]
-codeToList (a,b,c,d) = a : b : c : [d]
+codeToList (Code a b c d) = a : b : c : [d]
 
 listToCode :: [Int] -> Maybe Code
-listToCode (a:b:c:d:_) = Just (a, b, c, d)
+listToCode (a:b:c:d:_) = Just (Code a b c d)
 listToCode _ = Nothing
 
--- Take two codes and return a pair if Int-lists with all matching digits removed
+-- | Take two codes and return a pair of Int-lists with all matching digits removed
 remMatches :: Code -> Code -> ([Int], [Int])
 remMatches c1 c2 = remMatches' (codeToList c1, codeToList c2) 4
     where
@@ -74,6 +76,7 @@ remMatches c1 c2 = remMatches' (codeToList c1, codeToList c2) 4
             | x == y       = remMatches' (xs, ys) (n - 1)
             | otherwise    = remMatches' (xs ++ [x], ys ++ [y]) (n - 1)
 
+-- | Take two codes and return a hint which shows how many digits match and/or are included
 hint :: Code -> Code -> Hint
 hint c1 c2 = ones ++ zeros (fst pair) (snd pair)
     where
