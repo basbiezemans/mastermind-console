@@ -16,6 +16,7 @@ import System.Random (randomRIO)
 import System.IO
 import Data.Maybe (fromJust, isNothing)
 import Lib
+import Code
 
 main :: IO ()
 main = do
@@ -47,7 +48,7 @@ play game = do
     putStr "Guess: "
     hFlush stdout
     input <- getLine
-    let guess = fromInput input
+    let guess = makeCode input
     if isNothing guess then do
         putStrLn "Please enter 4 digits, where each digit is between 1 and 6, e.g. 1234"
         play game

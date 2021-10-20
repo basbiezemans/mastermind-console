@@ -1,15 +1,12 @@
 module Lib where
 
-import Data.Char
 import Data.Maybe
+import Code
 
 type Counter = Int
 type Limit = Int
 type Player = Int
 type Hint = [Int]
-
-data Code = Code Int Int Int Int
-            deriving (Eq, Show)
 
 data Result = Correct
             | InCorrect
@@ -63,10 +60,6 @@ isCorrect InCorrect = False
 codeToList :: Code -> [Int]
 codeToList (Code a b c d) = a : b : c : [d]
 
-listToCode :: [Int] -> Maybe Code
-listToCode (a:b:c:d:_) = Just (Code a b c d)
-listToCode _ = Nothing
-
 -- | Take two codes and return a pair of Int-lists with all matching digits removed
 remMatches :: Code -> Code -> ([Int], [Int])
 remMatches c1 c2 = remMatches' (codeToList c1, codeToList c2) 4
@@ -99,15 +92,3 @@ endOf game = limit game == counter game
 update :: Game -> Result -> Game
 update game Correct   = addCodeBreakerPoint game
 update game InCorrect = if endOf game then addCodeMakerPoint game else game
-
-fromInput :: String -> Maybe Code
-fromInput str = if isValid guess then listToCode guess else Nothing
-    where
-        guess = strToIntList str
-        valid x = 0 < x && x < 7
-        isValid xs = (length xs) == 4 && all valid xs
-
-strToIntList :: String -> [Int]
-strToIntList []                 = []
-strToIntList (x:xs) | isDigit x = digitToInt x : strToIntList xs
-                    | otherwise = strToIntList xs
