@@ -4,7 +4,10 @@ import Data.Char
 import Data.Maybe
 
 data Code = Code Int Int Int Int
-            deriving (Eq, Show)
+            deriving (Eq)
+
+instance Show Code where
+    show (Code a b c d) = show a ++ show b ++ show c ++ show d
 
 -- | Smart constructor. Does not allow digits other than 1..6
 makeCode :: String -> Maybe Code
