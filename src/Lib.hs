@@ -1,33 +1,14 @@
 module Lib where
 
 import Data.Maybe
+import Game
 import Code
 
-type Counter = Int
-type Limit = Int
-type Player = Int
 type Hint = [Int]
 
 data Result = Correct
             | InCorrect
             deriving (Show)
-
-data Game = Game
-    { pattern :: Code
-    , limit   :: Limit
-    , counter :: Counter
-    , maker   :: Player
-    , breaker :: Player
-    }
-
-newGame :: Code -> Limit -> Game
-newGame code limit = Game
-    { pattern = code
-    , limit   = limit
-    , counter = 1
-    , maker   = 0
-    , breaker = 0
-    }
 
 getPattern :: Game -> Code
 getPattern = pattern

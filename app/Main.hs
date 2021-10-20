@@ -16,6 +16,7 @@ import System.Random (randomRIO)
 import System.IO
 import Data.Maybe (fromJust, isNothing)
 import Lib
+import Game
 import Code
 
 main :: IO ()
@@ -23,7 +24,7 @@ main = do
     putStrLn "A new game has been created. Good luck!"
     -- Create a new game with a maximum of 10 turns 
     code <- generateCode
-    play $ newGame code 10
+    play $ makeGame code 10
 
 newline :: IO ()
 newline = putChar '\n'
