@@ -54,12 +54,12 @@ play game = do
         play game
     else do
         let code = fromJust guess
-        let pattern = getPattern game
-        let result = resultOf code pattern
+        let patt = pattern game
+        let result = resultOf code patt
         if isCorrect result || endOf game then do
             case result of
                 Correct   -> putStrLn "You won!"
-                InCorrect -> putStrLn $ "You lost. The answer was " ++ (show pattern)
+                InCorrect -> putStrLn $ "You lost. The answer was " ++ (show patt)
             newline
             putStr "Would you like to play again? (Y/n) (default is Y): "
             hFlush stdout
@@ -69,13 +69,11 @@ play game = do
                 'n' -> newline
                 _   -> main
         else do
-            let count = unCounter $ getCounter game
-            putStr "Turn: #"
-            putStrLn (show count)
-            putStr "Hint: "
-            putStrLn (show $ hint code pattern)
+            let count = unCounter $ counter game
+            putStrLn $ "Turn: #" ++ (show count)
+            putStrLn $ "Hint: " ++ (show $ hint code patt)
             if count == 5 then do
                 putStr "Hint: the sum of the digits in the code is "
-                putStrLn (show $ sum $ codeToList pattern)
+                putStrLn (show $ sum $ codeToList patt)
             else return ()
             play $ incCounter game

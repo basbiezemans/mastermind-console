@@ -10,32 +10,17 @@ data Result = Correct
             | InCorrect
             deriving (Show)
 
-getPattern :: Game -> Code
-getPattern = pattern
-
-getLimit :: Game -> Limit
-getLimit = limit
-
-getCounter :: Game -> Counter
-getCounter = counter
-
-getScore :: Game -> (CodeMaker, CodeBreaker)
+getScore :: Game -> (CodeMaker Int, CodeBreaker Int)
 getScore game = (maker game, breaker game)
 
 incCounter :: Game -> Game
-incCounter game = game { counter = inc $ counter game }
-    where
-        inc (Counter x) = Counter (succ x)
+incCounter game = game { counter = succ <$> counter game }
 
 addCodeMakerPoint :: Game -> Game
-addCodeMakerPoint game = game { maker = inc $ maker game }
-    where
-        inc (CodeMaker x) = CodeMaker (succ x)
+addCodeMakerPoint game = game { maker = succ <$> maker game }
 
 addCodeBreakerPoint :: Game -> Game
-addCodeBreakerPoint game = game { breaker = inc $ breaker game }
-    where
-        inc (CodeBreaker x) = CodeBreaker (succ x)
+addCodeBreakerPoint game = game { breaker = succ <$> breaker game }
 
 resultOf :: Code -> Code -> Result
 resultOf c1 c2 = if c1 == c2 then Correct else InCorrect
