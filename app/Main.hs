@@ -49,31 +49,47 @@ play game = do
     hFlush stdout
     input <- getLine
     let guess = makeCode input
-    if isNothing guess then do
-        putStrLn "Please enter 4 digits, where each digit is between 1 and 6, e.g. 1234"
-        play game
-    else do
-        let code = fromJust guess
-        let patt = pattern game
-        let result = resultOf code patt
-        if isCorrect result || endOf game then do
-            case result of
-                Correct   -> putStrLn "You won!"
-                InCorrect -> putStrLn $ "You lost. The answer was " ++ (show patt)
-            newline
-            putStr "Would you like to play again? (Y/n) (default is Y): "
-            hFlush stdout
-            choice <- getChar
-            newline
-            case choice of
-                'n' -> newline
-                _   -> main
-        else do
-            let count = unCounter $ counter game
-            putStrLn $ "Turn: #" ++ (show count)
-            putStrLn $ "Hint: " ++ (show $ hint code patt)
-            if count == 5 then do
-                putStr "Hint: the sum of the digits in the code is "
-                putStrLn (show $ sum $ codeToList patt)
-            else return ()
-            play $ incCounter game
+    case guess of
+        Nothing   -> showHelp game
+        Just code -> showHintOrResult game code
+
+showHintOrResult :: Game -> Code -> IO ()
+showHintOrResult game code = do
+    let patt = pattern game
+    let result = resultOf code patt
+    if isCorrect result || endOf game then
+        showResult result patt
+    else
+        showHint game code
+
+showHelp :: Game -> IO ()
+showHelp game = do
+    putStrLn "Please enter 4 digits, where each digit is between 1 and 6, e.g. 1234"
+    play game
+
+showResult :: Result -> Code -> IO ()
+showResult result patt = do
+    case result of
+        Correct   -> putStrLn "You won!"
+        InCorrect -> putStrLn $ "You lost. The answer was " ++ (show patt)
+    newline
+    putStr "Would you like to play again? (Y/n) (default is Y): "
+    hFlush stdout
+    choice <- getChar
+    newline
+    case choice of
+        'n' -> newline
+        _   -> main
+
+showHint :: Game -> Code -> IO ()
+showHint game code = do
+    let count = unCounter $ counter game
+    let patt = pattern game
+    putStrLn $ "Turn: #" ++ (show count)
+    putStrLn $ "Hint: " ++ (show $ hint code patt)
+    if count == 5 then do
+        putStr "Hint: the sum of the digits in the code is "
+        putStrLn (show $ sum $ codeToList patt)
+    else
+        return ()
+    play $ incCounter game
