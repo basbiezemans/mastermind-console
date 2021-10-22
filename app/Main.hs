@@ -28,6 +28,14 @@ main = do
 newline :: IO ()
 newline = putChar '\n'
 
+askCode :: String -> IO (Maybe Code)
+askCode question = do
+    newline
+    putStr question
+    hFlush stdout
+    input <- getLine
+    return (makeCode input)
+
 genRandomDigit :: (Int,Int) -> IO Int
 genRandomDigit range = do
     i <- randomRIO range
@@ -44,17 +52,13 @@ generateCode = do
 
 play :: Game -> IO ()
 play game = do
-    newline
-    putStr "Guess: "
-    hFlush stdout
-    input <- getLine
-    let guess = makeCode input
+    guess <- askCode "Guess: "
     case guess of
         Nothing   -> showHelp game
-        Just code -> showHintOrResult game code
+        Just code -> continue game code
 
-showHintOrResult :: Game -> Code -> IO ()
-showHintOrResult game code = do
+continue :: Game -> Code -> IO ()
+continue game code = do
     let patt = pattern game
     let result = resultOf code patt
     if isCorrect result || endOf game then
