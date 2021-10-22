@@ -14,7 +14,7 @@ module Main (main) where
 
 import System.Random (randomRIO)
 import System.IO
-import Data.Maybe (fromJust, isNothing)
+import Data.Maybe
 import Lib
 import Game
 import Code
@@ -90,7 +90,7 @@ showHint game code = do
     let count = unCounter $ counter game
     let patt = pattern game
     putStrLn $ "Turn: #" ++ (show count)
-    putStrLn $ "Hint: " ++ (show $ hint code patt)
+    putStrLn $ "Hint: " ++ (hint code patt)
     if count == 5 then do
         putStr "Hint: the sum of the digits in the code is "
         putStrLn (show $ sum $ codeToList patt)

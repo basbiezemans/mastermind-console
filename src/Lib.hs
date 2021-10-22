@@ -1,10 +1,10 @@
 module Lib where
 
+import Data.List (intersperse)
+import Data.Char (intToDigit)
 import Data.Maybe
 import Game
 import Code
-
-type Hint = [Int]
 
 data Result = Correct
             | InCorrect
@@ -42,8 +42,8 @@ remMatches c1 c2 = remMatches' (codeToList c1, codeToList c2) 4
             | otherwise    = remMatches' (xs ++ [x], ys ++ [y]) (n - 1)
 
 -- | Take two codes and return a hint which shows how many digits match and/or are included
-hint :: Code -> Code -> Hint
-hint c1 c2 = ones ++ zeros (fst pair) (snd pair)
+hint :: Code -> Code -> String
+hint c1 c2 = hintToString $ ones ++ zeros (fst pair) (snd pair)
     where
         pair = remMatches c1 c2
         len = 4 - (length $ fst pair)
@@ -54,6 +54,10 @@ hint c1 c2 = ones ++ zeros (fst pair) (snd pair)
             | otherwise = (zeros xs ys)
             where
                 remove e xs = filter (/= e) xs
+
+hintToString :: [Int] -> String
+hintToString [] = "no matching digits"
+hintToString xs = intersperse ',' $ map intToDigit xs
 
 endOf :: Game -> Bool
 endOf game = unLimit (limit game) == unCounter (counter game)
