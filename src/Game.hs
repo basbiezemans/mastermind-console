@@ -1,11 +1,11 @@
 module Game
     ( Game (..)
     , Limit (..)
-    , Counter
-    , CodeMaker
-    , CodeBreaker
+    , Counter (..)
+    , CodeMaker (..)
+    , CodeBreaker (..)
+    , inc
     , makeGame
-    , unCounter
     ) where
 
 import Code
@@ -14,30 +14,34 @@ newtype Limit = Limit
     { unLimit :: Int
     } deriving (Show)
 
-data Counter a = Counter a
+newtype Counter = Counter
+    { unCounter :: Int
+    } deriving (Show)
+
+newtype CodeMaker = CodeMaker Int
     deriving (Show)
 
-data CodeMaker a = CodeMaker a
+newtype CodeBreaker = CodeBreaker Int
     deriving (Show)
 
-data CodeBreaker a = CodeBreaker a
-    deriving (Show)
+class Incrementable a where
+    inc :: a -> a
 
-instance Functor Counter where
-    fmap f (Counter x) = Counter (f x)
+instance Incrementable Counter where
+    inc (Counter n) = Counter (n + 1)
 
-instance Functor CodeMaker where
-    fmap f (CodeMaker x) = CodeMaker (f x)
+instance Incrementable CodeMaker where
+    inc (CodeMaker n) = CodeMaker (n + 1)
 
-instance Functor CodeBreaker where
-    fmap f (CodeBreaker x) = CodeBreaker (f x)
+instance Incrementable CodeBreaker where
+    inc (CodeBreaker n) = CodeBreaker (n + 1)
 
 data Game = Game
     { pattern :: Code
     , limit   :: Limit
-    , counter :: Counter Int
-    , maker   :: CodeMaker Int
-    , breaker :: CodeBreaker Int
+    , counter :: Counter
+    , maker   :: CodeMaker
+    , breaker :: CodeBreaker
     }
 
 makeGame :: Code -> Limit -> Game
@@ -48,6 +52,3 @@ makeGame code limit = Game
     , maker   = CodeMaker 0
     , breaker = CodeBreaker 0
     }
-
-unCounter :: Counter Int -> Int
-unCounter (Counter x) = x

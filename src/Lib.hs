@@ -10,17 +10,17 @@ data Result = Correct
             | InCorrect
             deriving (Show)
 
-getScore :: Game -> (CodeMaker Int, CodeBreaker Int)
+getScore :: Game -> (CodeMaker, CodeBreaker)
 getScore game = (maker game, breaker game)
 
 incCounter :: Game -> Game
-incCounter game = game { counter = succ <$> counter game }
+incCounter game = game { counter = inc $ counter game }
 
 addCodeMakerPoint :: Game -> Game
-addCodeMakerPoint game = game { maker = succ <$> maker game }
+addCodeMakerPoint game = game { maker = inc $ maker game }
 
 addCodeBreakerPoint :: Game -> Game
-addCodeBreakerPoint game = game { breaker = succ <$> breaker game }
+addCodeBreakerPoint game = game { breaker = inc $ breaker game }
 
 resultOf :: Code -> Code -> Result
 resultOf c1 c2 = if c1 == c2 then Correct else InCorrect
