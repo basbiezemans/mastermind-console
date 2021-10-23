@@ -64,11 +64,12 @@ play game = do
 
 continue :: Game -> Code -> IO ()
 continue game code = do
+    let scores = getScoreVals game
     let patt = pattern game
     let result = resultOf code patt
     if isCorrect result || endOf game then do
         store game result ".mastermind"
-        showResult result patt
+        showResult result patt scores
     else
         showHint game code
 
@@ -77,11 +78,16 @@ showHelp game = do
     putStrLn "Please enter 4 digits, where each digit is between 1 and 6, e.g. 1234"
     play game
 
-showResult :: Result -> Code -> IO ()
-showResult result patt = do
+showResult :: Result -> Code -> (Int, Int) -> IO ()
+showResult result patt scores = do
+    let mPoints = fst scores
+    let bPoints = snd scores
     case result of
         Correct   -> putStrLn "You won!"
         InCorrect -> putStrLn $ "You lost. The answer was " ++ (show patt)
+    newline
+    putStr $ "The score is: " ++ (show bPoints) ++ " (You) / "
+    putStrLn $ (show mPoints) ++ " (Code Maker)"
     newline
     putStr "Would you like to play again? (Y/n) (default is Y): "
     hFlush stdout
