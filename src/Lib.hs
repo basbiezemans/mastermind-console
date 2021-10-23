@@ -10,8 +10,11 @@ data Result = Correct
             | InCorrect
             deriving (Show)
 
-getScore :: Game -> (CodeMaker, CodeBreaker)
-getScore game = (maker game, breaker game)
+getScoreVals :: Game -> (Int, Int)
+getScoreVals game = (getMakerPoints m, getBreakerPoints b)
+    where
+        m = maker game
+        b = breaker game
 
 incCounter :: Game -> Game
 incCounter game = game { counter = inc $ counter game }

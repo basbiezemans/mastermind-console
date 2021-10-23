@@ -18,11 +18,13 @@ newtype Counter = Counter
     { unCounter :: Int
     } deriving (Show)
 
-newtype CodeMaker = CodeMaker Int
-    deriving (Show)
+newtype CodeMaker = CodeMaker
+    { getMakerPoints :: Int
+    } deriving (Show)
 
-newtype CodeBreaker = CodeBreaker Int
-    deriving (Show)
+newtype CodeBreaker = CodeBreaker
+    { getBreakerPoints :: Int
+    } deriving (Show)
 
 class Incrementable a where
     inc :: a -> a

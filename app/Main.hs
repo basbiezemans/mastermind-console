@@ -61,7 +61,8 @@ continue :: Game -> Code -> IO ()
 continue game code = do
     let patt = pattern game
     let result = resultOf code patt
-    if isCorrect result || endOf game then
+    if isCorrect result || endOf game then do
+        store game result ".mastermind"
         showResult result patt
     else
         showHint game code
@@ -97,3 +98,12 @@ showHint game code = do
     else
         return ()
     play $ incCounter game
+
+store :: Game -> Result -> String -> IO ()
+store game result filePath =
+    case result of
+        Correct -> writeScore $ addCodeBreakerPoint game
+        InCorrect -> writeScore $ addCodeMakerPoint game
+    where
+        toString (m, b) = unwords $ map show [m, b]
+        writeScore game = writeFile filePath $ toString $ getScoreVals game
