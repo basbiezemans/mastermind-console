@@ -46,11 +46,11 @@ data Game = Game
     , breaker :: CodeBreaker
     }
 
-makeGame :: Code -> Limit -> Game
-makeGame code limit = Game
+makeGame :: Code -> Limit -> (CodeMaker, CodeBreaker) -> Game
+makeGame code limit players = Game
     { pattern = code
     , limit   = limit
     , counter = Counter 1
-    , maker   = CodeMaker 0
-    , breaker = CodeBreaker 0
+    , maker   = fst players
+    , breaker = snd players
     }

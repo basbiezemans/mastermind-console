@@ -3,6 +3,7 @@ module Lib where
 import Data.List (intersperse)
 import Data.Char (intToDigit)
 import Data.Maybe
+import Text.Read
 import Game
 import Code
 
@@ -65,6 +66,11 @@ hintToString xs = intersperse ',' $ map intToDigit xs
 endOf :: Game -> Bool
 endOf game = unLimit (limit game) == unCounter (counter game)
 
-update :: Game -> Result -> Game
-update game Correct   = addCodeBreakerPoint game
-update game InCorrect = if endOf game then addCodeMakerPoint game else game
+strToScore :: String -> (CodeMaker, CodeBreaker)
+strToScore str = (CodeMaker m, CodeBreaker b)
+    where
+        safeRead s = readMaybe s :: Maybe Int
+        isDuo = (== 2) . length
+        score = words str
+        readInt = (fromMaybe 0) . safeRead
+        [m, b] = if isDuo score then map readInt score else [0, 0]

@@ -15,6 +15,7 @@ module Main (main) where
 import System.Random (randomRIO)
 import System.IO
 import Data.Maybe
+import Control.Exception
 import Lib
 import Game
 import Code
@@ -23,7 +24,11 @@ main :: IO ()
 main = do
     putStrLn "A new game has been created. Good luck!"
     code <- generateCode
-    play $ makeGame code $ Limit 10
+    mstr <- retrieve ".mastermind"
+    play $ makeGame code (Limit 10) $
+        case mstr of
+            Just str -> strToScore str
+            Nothing  -> (CodeMaker 0, CodeBreaker 0)
 
 newline :: IO ()
 newline = putChar '\n'
@@ -107,3 +112,11 @@ store game result filePath =
     where
         toString (m, b) = unwords $ map show [m, b]
         writeScore game = writeFile filePath $ toString $ getScoreVals game
+
+retrieve :: String -> IO (Maybe String)
+retrieve filePath = safeReadFile filePath
+    where
+        exception exp = const (return "") (exp :: IOException)
+        safeReadFile filePath = do
+            contents <- readFile filePath `catch` exception
+            return (if contents == "" then Nothing else Just contents)
