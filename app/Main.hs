@@ -14,11 +14,12 @@ module Main (main) where
 
 import System.Random (randomRIO)
 import System.IO
+import System.Directory
 import Data.Maybe
-import Control.Exception
 import Lib
 import Game
 import Code
+import qualified Strict
 
 main :: IO ()
 main = do
@@ -120,9 +121,10 @@ store game result filePath =
         writeScore game = writeFile filePath $ toString $ getScoreVals game
 
 retrieve :: String -> IO (Maybe String)
-retrieve filePath = safeReadFile filePath
-    where
-        exception exp = const (return "") (exp :: IOException)
-        safeReadFile filePath = do
-            contents <- readFile filePath `catch` exception
-            return (if contents == "" then Nothing else Just contents)
+retrieve filePath = do
+    fileExists <- doesFileExist filePath
+    if fileExists then do
+        contents <- Strict.readFile filePath
+        return (Just contents)
+    else
+        return Nothing
