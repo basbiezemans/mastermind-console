@@ -1,3 +1,5 @@
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
 module Game
     ( Game (..)
     , Limit (..)
@@ -16,27 +18,21 @@ newtype Limit = Limit
 
 newtype Counter = Counter
     { unCounter :: Int
-    } deriving (Show)
+    } deriving (Show, Increment)
 
 newtype CodeMaker = CodeMaker
     { getMakerPoints :: Int
-    } deriving (Show)
+    } deriving (Show, Increment)
 
 newtype CodeBreaker = CodeBreaker
     { getBreakerPoints :: Int
-    } deriving (Show)
+    } deriving (Show, Increment)
 
-class Incrementable a where
+class Increment a where
     inc :: a -> a
 
-instance Incrementable Counter where
-    inc (Counter n) = Counter (n + 1)
-
-instance Incrementable CodeMaker where
-    inc (CodeMaker n) = CodeMaker (n + 1)
-
-instance Incrementable CodeBreaker where
-    inc (CodeBreaker n) = CodeBreaker (n + 1)
+instance Increment Int where
+    inc = (+ 1)
 
 data Game = Game
     { pattern :: Code
