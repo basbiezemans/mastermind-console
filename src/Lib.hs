@@ -1,6 +1,6 @@
 module Lib where
 
-import Data.List (intersperse)
+import Data.List (intersperse, delete)
 import Data.Char (intToDigit)
 import Data.Maybe
 import Text.Read
@@ -54,10 +54,8 @@ hint c1 c2 = hintToString $ ones ++ zeros (fst pair) (snd pair)
         ones = replicate len 1
         zeros [] _      = []
         zeros (x:xs) ys
-            | elem x ys = (zeros xs (remove x ys)) ++ [0]
-            | otherwise = (zeros xs ys)
-            where
-                remove e xs = filter (/= e) xs
+            | elem x ys = 0 : (zeros xs $ delete x ys)
+            | otherwise = zeros xs ys
 
 hintToString :: [Int] -> String
 hintToString [] = "no matching digits"
