@@ -34,7 +34,7 @@ isCorrect Correct   = True
 isCorrect InCorrect = False
 
 codeToList :: Code -> [Int]
-codeToList (Code a b c d) = a : b : c : [d]
+codeToList (Code a b c d) = [a, b, c, d]
 
 -- | Take two codes and return a pair of Int-lists with all matching digits removed
 remMatches :: Code -> Code -> ([Int], [Int])
