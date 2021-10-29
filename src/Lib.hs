@@ -36,9 +36,12 @@ isCorrect InCorrect = False
 codeToList :: Code -> [Int]
 codeToList (Code a b c d) = [a, b, c, d]
 
+codeLen :: Int
+codeLen = 4
+
 -- | Take two codes and return a pair of Int-lists with all matching digits removed
 remMatches :: Code -> Code -> ([Int], [Int])
-remMatches c1 c2 = remMatches' (codeToList c1, codeToList c2) 4
+remMatches c1 c2 = remMatches' (codeToList c1, codeToList c2) codeLen
     where
         remMatches' pair 0 = pair
         remMatches' ((x:xs), (y:ys)) n
@@ -50,7 +53,7 @@ hint :: Code -> Code -> String
 hint c1 c2 = hintToString $ ones ++ zeros (fst pair) (snd pair)
     where
         pair = remMatches c1 c2
-        len = 4 - (length $ fst pair)
+        len = codeLen - (length $ fst pair)
         ones = replicate len 1
         zeros [] _      = []
         zeros (x:xs) ys
