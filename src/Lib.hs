@@ -17,6 +17,12 @@ getScoreVals game = (getMakerPoints m, getBreakerPoints b)
         m = maker game
         b = breaker game
 
+update :: Game -> Result -> Game
+update game result =
+    case result of
+        Correct -> addCodeBreakerPoint game
+        InCorrect -> addCodeMakerPoint game
+
 incCounter :: Game -> Game
 incCounter game = game { counter = inc $ counter game }
 
@@ -67,11 +73,31 @@ hintToString xs = intersperse ',' $ map intToDigit xs
 endOf :: Game -> Bool
 endOf game = unLimit (limit game) == unCounter (counter game)
 
-strToScore :: String -> (CodeMaker, CodeBreaker)
-strToScore str = (CodeMaker m, CodeBreaker b)
+chunkAsPairs :: [String] -> [(String, String)]
+chunkAsPairs []      = []
+chunkAsPairs (k:v:t) = (k, v) : chunkAsPairs t
+
+getFromPairs :: String -> [(String, String)] -> Maybe String
+getFromPairs key [] = Nothing
+getFromPairs key (x:xs)
+    | key == fst x  = Just (snd x)
+    | otherwise     = getFromPairs key xs
+
+makeEven :: [String] -> [String]
+makeEven list = if even (length list) then list else list ++ [""]
+
+getLimit :: Int -> [String] -> Limit
+getLimit default' list =
+    case limit of
+        Just s  -> Limit $ fromMaybe default' $ safeVal s
+        Nothing -> Limit default'
     where
-        safeRead s = readMaybe s :: Maybe Int
-        isDuo = (== 2) . length
-        score = words str
-        readInt = (fromMaybe 0) . safeRead
-        [m, b] = if isDuo score then map readInt score else [0, 0]
+        safeVal s = (readMaybe s :: Maybe Int) >>= safeInt
+        safeInt x = if elem x [8..12] then Just x else Nothing
+        limit = getFromPairs "--limit" $ chunkAsPairs $ makeEven list
+
+strToScore :: String -> (CodeMaker, CodeBreaker)
+strToScore str = (CodeMaker $ fst scores, CodeBreaker $ snd scores)
+    where
+        scores = fromMaybe (0,0) $ safeRead str
+        safeRead s = readMaybe s :: Maybe (Int, Int)

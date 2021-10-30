@@ -6,7 +6,7 @@ the role of codemaker. As a codebreaker, you can guess the code by
 entering a four digit number, where each digit is between 1 and 6. The
 app will respond with a hint. This hint will be empty in case non of
 the digits were guessed correctly or filled with a combination of ones
-and zeros for correctly guessed digits. One indicates that a digit has
+and zeros for correctly guessed digits. A one indicates that a digit has
 the correct position, and zero that it doesn't.
 
 -}
@@ -15,6 +15,7 @@ module Main (main) where
 import System.Random (randomRIO)
 import System.IO
 import System.Directory
+import System.Environment
 import Data.Maybe
 import Lib
 import Game
@@ -23,13 +24,20 @@ import qualified Strict
 
 main :: IO ()
 main = do
-    putStrLn "A new game has been created. Good luck!"
+    putStrLn "Welcome to Mastermind, a code-breaking game."
+    args <- getArgs
+    newGame $ getLimit 10 args
+
+newGame :: Limit -> IO ()
+newGame limit = do
+    putStr $ "You have " ++ (show $ unLimit limit)
+    putStrLn " turns to guess the code. Good luck!"
     code <- generateCode
     mstr <- retrieve ".mastermind"
-    play $ makeGame code (Limit 10) $
+    play $ makeGame code limit $
         case mstr of
-            Just str -> strToScore str
-            Nothing  -> (CodeMaker 0, CodeBreaker 0)
+            Just s  -> strToScore s
+            Nothing -> (CodeMaker 0, CodeBreaker 0)
 
 newline :: IO ()
 newline = putChar '\n'
@@ -55,29 +63,28 @@ play :: Game -> IO ()
 play game = do
     guess <- askCode "Guess: "
     case guess of
-        Nothing   -> showHelp game
+        Nothing   -> explain game
         Just code -> continue game code
 
 continue :: Game -> Code -> IO ()
-continue game code = do
-    let scores = getScoreVals game
-    let patt = pattern game
-    let result = resultOf code patt
+continue game guess = do
+    let result = resultOf guess $ pattern game
     if isCorrect result || endOf game then do
-        store game result ".mastermind"
-        showResult result patt scores
+        let current = update game result
+        store current ".mastermind"
+        recap current result
     else
-        showHint game code
+        evaluate game guess
 
-showHelp :: Game -> IO ()
-showHelp game = do
+explain :: Game -> IO ()
+explain game = do
     putStrLn "Please enter 4 digits, where each digit is between 1 and 6, e.g. 1234"
     play game
 
-showResult :: Result -> Code -> (Int, Int) -> IO ()
-showResult result patt scores = do
-    let mPoints = fst scores
-    let bPoints = snd scores
+recap :: Game -> Result -> IO ()
+recap game result = do
+    let (mPoints, bPoints) = getScoreVals game
+    let patt = pattern game
     case result of
         Correct   -> putStrLn "You won!"
         InCorrect -> putStrLn $ "You lost. The answer was " ++ (show patt)
@@ -91,14 +98,14 @@ showResult result patt scores = do
     newline
     case choice of
         'n' -> newline
-        _   -> main
+        _   -> newGame $ limit game
 
-showHint :: Game -> Code -> IO ()
-showHint game code = do
+evaluate :: Game -> Code -> IO ()
+evaluate game guess = do
     let count = unCounter $ counter game
     let patt = pattern game
     putStrLn $ "Turn: #" ++ (show count)
-    putStrLn $ "Hint: " ++ (hint code patt)
+    putStrLn $ "Hint: " ++ (hint guess patt)
     if count == 5 then do
         putStr "Hint: the sum of the digits in the code is "
         putStrLn (show $ sum $ codeToList patt)
@@ -106,14 +113,8 @@ showHint game code = do
         return ()
     play $ incCounter game
 
-store :: Game -> Result -> String -> IO ()
-store game result filePath =
-    case result of
-        Correct -> writeScore $ addCodeBreakerPoint game
-        InCorrect -> writeScore $ addCodeMakerPoint game
-    where
-        toString (m, b) = unwords $ map show [m, b]
-        writeScore game = writeFile filePath $ toString $ getScoreVals game
+store :: Game -> String -> IO ()
+store game filePath = writeFile filePath $ show $ getScoreVals game
 
 retrieve :: String -> IO (Maybe String)
 retrieve filePath = do
