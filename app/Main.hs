@@ -6,16 +6,17 @@ the role of codemaker. As a codebreaker, you can guess the code by
 entering a four digit number, where each digit is between 1 and 6. The
 app will respond with a hint. This hint will be empty in case non of
 the digits were guessed correctly or filled with a combination of ones
-and zeros for correctly guessed digits. A one indicates that a digit has
-the correct position, and zero that it doesn't.
+and zeros for correctly guessed digits. A one indicates that a digit
+has the correct position, and zero that it doesn't.
 
 -}
 module Main (main) where
 
 import System.Random (randomRIO)
 import System.IO
+import System.Exit
 import System.Directory
-import System.Environment
+import System.Environment (getArgs)
 import Data.Maybe
 import Lib
 import Game
@@ -23,13 +24,36 @@ import Code
 import qualified Strict
 
 main :: IO ()
-main = do
-    putStrLn "Welcome to Mastermind, a code-breaking game."
-    args <- getArgs
-    newGame $ getLimit 10 args
+main = getArgs >>= parse
+
+parse :: [String] -> IO ()
+parse []            = newGame $ Limit 10
+parse ["-t", n]     = newGame $ makeLimit 10 n
+parse ["-h"]        = usage >> exit
+parse ["-v"]        = version >> exit
+parse ["--help"]    = parse ["-h"]
+parse ["--version"] = parse ["-v"]
+parse _             = parse ["-h"]
+
+usage :: IO ()
+usage = do
+    putStrLn "\nUsage: mastermind [-t NUMBER]"
+    putStrLn "\nAvailable options:"
+    putStrLn "  -h, --help         Show this help text"
+    putStrLn "  -v, --version      Show the version number"
+    putStrLn "  -t NUMBER          Number of turns from 8-12 (default: 10)\n"
+
+version :: IO ()
+version = putStrLn "Mastermind v0.1"
+
+exit :: IO ()
+exit = exitWith ExitSuccess
 
 newGame :: Limit -> IO ()
 newGame limit = do
+    putStrLn "+------------------------------------+"
+    putStrLn "| Mastermind, the code-breaking game |"
+    putStrLn "+------------------------------------+"
     putStr $ "You have " ++ (show $ unLimit limit)
     putStrLn " turns to guess the code. Good luck!"
     code <- generateCode

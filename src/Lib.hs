@@ -73,28 +73,14 @@ hintToString xs = intersperse ',' $ map intToDigit xs
 endOf :: Game -> Bool
 endOf game = unLimit (limit game) == unCounter (counter game)
 
-chunkAsPairs :: [String] -> [(String, String)]
-chunkAsPairs []      = []
-chunkAsPairs (k:v:t) = (k, v) : chunkAsPairs t
-
-getFromPairs :: String -> [(String, String)] -> Maybe String
-getFromPairs key [] = Nothing
-getFromPairs key (x:xs)
-    | key == fst x  = Just (snd x)
-    | otherwise     = getFromPairs key xs
-
-makeEven :: [String] -> [String]
-makeEven list = if even (length list) then list else list ++ [""]
-
-getLimit :: Int -> [String] -> Limit
-getLimit default' list =
-    case limit of
-        Just s  -> Limit $ fromMaybe default' $ safeVal s
+makeLimit :: Int -> String -> Limit
+makeLimit default' str =
+    case safeVal str of
+        Just n  -> Limit n
         Nothing -> Limit default'
     where
         safeVal s = (readMaybe s :: Maybe Int) >>= safeInt
         safeInt x = if elem x [8..12] then Just x else Nothing
-        limit = getFromPairs "--limit" $ chunkAsPairs $ makeEven list
 
 strToScore :: String -> (CodeMaker, CodeBreaker)
 strToScore str = (CodeMaker $ fst scores, CodeBreaker $ snd scores)
