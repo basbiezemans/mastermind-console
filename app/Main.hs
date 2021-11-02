@@ -27,13 +27,14 @@ main :: IO ()
 main = getArgs >>= parse
 
 parse :: [String] -> IO ()
-parse []            = newGame $ Limit 10
-parse ["-t", n]     = newGame $ makeLimit 10 n
-parse ["-h"]        = usage >> exit
-parse ["-v"]        = version >> exit
-parse ["--help"]    = parse ["-h"]
-parse ["--version"] = parse ["-v"]
-parse _             = parse ["-h"]
+parse args = case args of
+    []            -> newGame $ Limit 10
+    ["-t", n]     -> newGame $ makeLimit 10 n
+    ["-h"]        -> usage >> exit
+    ["-v"]        -> version >> exit
+    ["--help"]    -> parse ["-h"]
+    ["--version"] -> parse ["-v"]
+    _             -> parse ["-h"]
 
 usage :: IO ()
 usage = do
@@ -94,9 +95,9 @@ continue :: Game -> Code -> IO ()
 continue game guess = do
     let result = resultOf guess $ pattern game
     if isCorrect result || endOf game then do
-        let current = update game result
-        store current ".mastermind"
-        recap current result
+        let game = update game result
+        store game ".mastermind"
+        recap game result
     else
         evaluate game guess
 
