@@ -95,9 +95,9 @@ continue :: Game -> Code -> IO ()
 continue game guess = do
     let result = resultOf guess $ pattern game
     if isCorrect result || endOf game then do
-        let game = update game result
-        store game ".mastermind"
-        recap game result
+        let game' = update game result
+        store game' ".mastermind"
+        recap game' result
     else
         evaluate game guess
 
