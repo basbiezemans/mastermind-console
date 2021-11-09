@@ -50,13 +50,21 @@ version = putStrLn "Mastermind v0.1"
 exit :: IO ()
 exit = exitWith ExitSuccess
 
-newGame :: Limit -> IO ()
-newGame limit = do
+splash :: IO ()
+splash = do
     putStrLn "+------------------------------------+"
     putStrLn "| Mastermind, the code-breaking game |"
     putStrLn "+------------------------------------+"
-    putStr $ "You have " ++ (show $ unLimit limit)
+
+turns :: Int -> IO ()
+turns n = do
+    putStr $ "You have " ++ (show n)
     putStrLn " turns to guess the code. Good luck!"
+
+newGame :: Limit -> IO ()
+newGame limit = do
+    splash
+    turns $ unLimit limit
     code <- generateCode
     mstr <- retrieve ".mastermind"
     play $ makeGame code limit $
