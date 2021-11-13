@@ -1,5 +1,3 @@
-module LibTest where
-
 import Test.HUnit
 import Lib
 import Code
