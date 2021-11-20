@@ -39,12 +39,6 @@ isCorrect :: Result -> Bool
 isCorrect Correct   = True
 isCorrect InCorrect = False
 
-codeToList :: Code -> [Int]
-codeToList (Code a b c d) = [a, b, c, d]
-
-codeLen :: Int
-codeLen = 4
-
 -- | Take two codes and return a pair of Int-lists with all matching digits removed
 remMatches :: Code -> Code -> ([Int], [Int])
 remMatches c1 c2 = remMatches' (codeToList c1, codeToList c2) codeLen

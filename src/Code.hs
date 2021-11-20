@@ -1,4 +1,9 @@
-module Code (Code (Code), makeCode) where
+module Code
+    ( Code (Code)
+    , makeCode
+    , codeLen
+    , codeToList
+    ) where
 
 import Data.Char
 import Data.Maybe
@@ -14,8 +19,14 @@ makeCode :: String -> Maybe Code
 makeCode str = if isValid guess then listToCode guess else Nothing
     where
         guess = map digitToInt $ filter isDigit str
-        valid x = 0 < x && x < 7
-        isValid xs = (length xs) == 4 && all valid xs
+        valid x = elem x [1..6]
+        isValid xs = (length xs) == codeLen && all valid xs
+
+codeLen :: Int
+codeLen = 4
+
+codeToList :: Code -> [Int]
+codeToList (Code a b c d) = [a, b, c, d]
 
 listToCode :: [Int] -> Maybe Code
 listToCode (a:b:c:d:_) = Just (Code a b c d)
