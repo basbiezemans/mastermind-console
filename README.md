@@ -5,7 +5,7 @@ Mastermind code-breaking game as a console application
 
 ## Build and test
 ```bash
-$ stack test
+$ stack build --test
 ```
 
 ## Install
@@ -32,7 +32,7 @@ You have 10 turns to guess the code. Good luck!
 Guess: _
 ```
 
-As the codebreaker, you try to guess a 4-digit number, within ten turns. After each guess, the program (codemaker) provides a hint of ones and zeros. A one for each digit from the guess which is correct and in the right position. A zero indicates the existence of a correct digit in the wrong position.
+As the codebreaker, you try to guess a 4-digit number within ten turns. After each guess, the program (codemaker) provides a hint of ones and zeros. A one for each digit from the guess which is correct and in the right position. A zero indicates the existence of a correct digit in the wrong position.
 
 ```
 Guess: 1234
