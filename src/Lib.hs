@@ -48,6 +48,7 @@ remMatches c1 c2 = remMatches' (codeToList c1, codeToList c2) codeLen
         remMatches' ((x:xs), (y:ys)) n
             | x == y       = remMatches' (xs, ys) (n - 1)
             | otherwise    = remMatches' (xs ++ [x], ys ++ [y]) (n - 1)
+        remMatches' _ _    = error "Pigs might fly after all"
 
 -- | Take two codes and return a hint which shows how many digits match and/or are included
 hint :: Code -> Code -> String
