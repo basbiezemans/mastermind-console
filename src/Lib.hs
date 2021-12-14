@@ -53,11 +53,11 @@ hint :: Code -> Code -> String
 hint c1 c2 = hintToString $ ones ++ uncurry zeros pair
     where
         pair = remMatches c1 c2
-        len = codeLen - (length $ fst pair)
+        len = codeLen - length (fst pair)
         ones = replicate len 1
         zeros [] _      = []
         zeros (x:xs) ys
-            | elem x ys = 0 : (zeros xs $ delete x ys)
+            | elem x ys = 0 : zeros xs (delete x ys)
             | otherwise = zeros xs ys
 
 hintToString :: [Int] -> String
