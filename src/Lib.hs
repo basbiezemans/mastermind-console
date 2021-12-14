@@ -50,7 +50,7 @@ remMatches c1 c2 = remMatches' (codeToList c1, codeToList c2) codeLen
 
 -- | Take two codes and return a hint which shows how many digits match and/or are included
 hint :: Code -> Code -> String
-hint c1 c2 = hintToString $ ones ++ zeros (fst pair) (snd pair)
+hint c1 c2 = hintToString $ ones ++ uncurry zeros pair
     where
         pair = remMatches c1 c2
         len = codeLen - (length $ fst pair)
