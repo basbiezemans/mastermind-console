@@ -58,7 +58,7 @@ splash = do
 
 turns :: Int -> IO ()
 turns n = do
-    putStr $ "You have " ++ (show n)
+    putStr $ "You have " ++ show n
     putStrLn " turns to guess the code. Good luck!"
 
 newGame :: Limit -> IO ()
@@ -120,10 +120,10 @@ recap game result = do
     let patt = pattern game
     case result of
         Correct   -> putStrLn "You won!"
-        InCorrect -> putStrLn $ "You lost. The answer was " ++ (show patt)
+        InCorrect -> putStrLn $ "You lost. The answer was " ++ show patt
     newline
-    putStr $ "The score is: " ++ (show bPoints) ++ " (You) / "
-    putStrLn $ (show mPoints) ++ " (Code Maker)"
+    putStr $ "The score is: " ++ show bPoints ++ " (You) / "
+    putStrLn $ show mPoints ++ " (Code Maker)"
     newline
     putStr "Would you like to play again? (Y/n) (default is Y): "
     hFlush stdout
@@ -137,8 +137,8 @@ evaluate :: Game -> Code -> IO ()
 evaluate game guess = do
     let count = unCounter $ counter game
     let patt = pattern game
-    putStrLn $ "Turn: #" ++ (show count)
-    putStrLn $ "Hint: " ++ (hint guess patt)
+    putStrLn $ "Turn: #" ++ show count
+    putStrLn $ "Hint: " ++ hint guess patt
     if count == 5 then do
         putStr "Hint: the sum of the digits in the code is "
         putStrLn (show $ sum $ codeToList patt)
