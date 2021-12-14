@@ -69,9 +69,7 @@ newGame limit = do
     code <- generateCode
     mstr <- retrieve ".mastermind"
     play $ makeGame code limit $
-        case mstr of
-            Just s  -> strToScore s
-            Nothing -> (CodeMaker 0, CodeBreaker 0)
+        maybe (CodeMaker 0, CodeBreaker 0) strToScore mstr
 
 newline :: IO ()
 newline = putChar '\n'
