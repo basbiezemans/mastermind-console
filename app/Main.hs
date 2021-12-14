@@ -18,6 +18,7 @@ import System.Exit
 import System.Directory
 import System.Environment (getArgs)
 import Data.Maybe
+import Control.Monad (when)
 import Lib
 import Game
 import Code
@@ -139,11 +140,9 @@ evaluate game guess = do
     let patt = pattern game
     putStrLn $ "Turn: #" ++ show count
     putStrLn $ "Hint: " ++ hint guess patt
-    if count == 5 then do
+    when (count == 5) $ do
         putStr "Hint: the sum of the digits in the code is "
-        putStrLn (show $ sum $ codeToList patt)
-    else
-        return ()
+        putStrLn $ show $ sum $ codeToList patt
     play $ incCounter game
 
 store :: Game -> String -> IO ()
