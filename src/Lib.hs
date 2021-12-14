@@ -45,7 +45,7 @@ remMatches :: Code -> Code -> ([Int], [Int])
 remMatches c1 c2 = remMatches' (codeToList c1, codeToList c2) codeLen
     where
         remMatches' pair 0 = pair
-        remMatches' ((x:xs), (y:ys)) n
+        remMatches' (x:xs, y:ys) n
             | x == y       = remMatches' (xs, ys) (n - 1)
             | otherwise    = remMatches' (xs ++ [x], ys ++ [y]) (n - 1)
         remMatches' _ _    = error "Pigs might fly after all"
