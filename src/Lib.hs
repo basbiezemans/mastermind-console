@@ -3,6 +3,7 @@ module Lib where
 import Data.List (intersperse, delete)
 import Data.Char (intToDigit)
 import Data.Maybe
+import Data.Bifunctor (bimap)
 import Text.Read
 import Game
 import Code
@@ -77,7 +78,7 @@ makeLimit default' str =
         safeInt x = if elem x [8..12] then Just x else Nothing
 
 strToScore :: String -> (CodeMaker, CodeBreaker)
-strToScore str = (CodeMaker $ fst scores, CodeBreaker $ snd scores)
+strToScore str = bimap CodeMaker CodeBreaker scores
     where
         scores = fromMaybe (0,0) $ safeRead str
         safeRead s = readMaybe s :: Maybe (Int, Int)
