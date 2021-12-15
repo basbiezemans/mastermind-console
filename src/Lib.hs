@@ -2,9 +2,9 @@ module Lib where
 
 import Data.List (intersperse, delete)
 import Data.Char (intToDigit)
-import Data.Maybe
+import Data.Maybe (fromMaybe)
 import Data.Bifunctor (bimap)
-import Text.Read
+import Text.Read (readMaybe)
 import Game
 import Code
 
