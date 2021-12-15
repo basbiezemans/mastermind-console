@@ -40,21 +40,12 @@ isCorrect :: Result -> Bool
 isCorrect Correct   = True
 isCorrect InCorrect = False
 
--- | Take two codes and return a pair of Int-lists with all matching digits removed
-remMatches :: Code -> Code -> ([Int], [Int])
-remMatches c1 c2 = remMatches' (codeToList c1, codeToList c2) codeLen
-    where
-        remMatches' pair 0 = pair
-        remMatches' (x:xs, y:ys) n
-            | x == y       = remMatches' (xs, ys) (n - 1)
-            | otherwise    = remMatches' (xs ++ [x], ys ++ [y]) (n - 1)
-        remMatches' _ _    = error "Pigs might fly after all"
-
 -- | Take two codes and return a hint which shows how many digits match and/or are included
 hint :: Code -> Code -> String
 hint c1 c2 = hintToString $ ones ++ uncurry zeros pair
     where
-        pair = remMatches c1 c2
+        pairs = zip (codeToList c1) (codeToList c2)
+        pair = unzip $ filter (uncurry (/=)) pairs
         len = codeLen - length (fst pair)
         ones = replicate len 1
         zeros [] _      = []
