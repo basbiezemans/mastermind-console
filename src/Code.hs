@@ -20,7 +20,7 @@ makeCode str = if isValid guess then listToCode guess else Nothing
     where
         guess = map digitToInt $ filter isDigit str
         valid x = elem x [1..6]
-        isValid xs = (length xs) == codeLen && all valid xs
+        isValid xs = length xs == codeLen && all valid xs
 
 codeLen :: Int
 codeLen = 4
