@@ -1,6 +1,6 @@
 module Lib where
 
-import Data.List (intersperse, delete)
+import Data.List (intersperse, intersect)
 import Data.Char (intToDigit)
 import Data.Maybe (fromMaybe)
 import Data.Bifunctor (bimap)
@@ -42,16 +42,14 @@ isCorrect InCorrect = False
 
 -- | Take two codes and return a hint which shows how many digits match and/or are included
 hint :: Code -> Code -> String
-hint c1 c2 = hintToString $ ones ++ uncurry zeros pair
+hint guess code = hintToString $ ones ++ zeros
     where
-        pairs = zip (codeToList c1) (codeToList c2)
+        pairs = zip (codeToList guess) (codeToList code)
         pair = unzip $ filter (uncurry (/=)) pairs
-        len = codeLen - length (fst pair)
-        ones = replicate len 1
-        zeros [] _      = []
-        zeros (x:xs) ys
-            | elem x ys = 0 : zeros xs (delete x ys)
-            | otherwise = zeros xs ys
+        n = codeLen - length (fst pair)
+        ones = replicate n 1
+        m = length $ uncurry intersect pair
+        zeros = replicate m 0
 
 hintToString :: [Int] -> String
 hintToString [] = "no matching digits"
