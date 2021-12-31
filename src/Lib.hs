@@ -60,12 +60,10 @@ endOf game = unLimit (limit game) == unCounter (counter game)
 
 makeLimit :: Int -> String -> Limit
 makeLimit default' str =
-    case safeVal str of
-        Just n  -> Limit n
-        Nothing -> Limit default'
+    Limit $ fromMaybe default' $ safeRead str
     where
-        safeVal s = (readMaybe s :: Maybe Int) >>= safeInt
-        safeInt x = if elem x [8..12] then Just x else Nothing
+        safeRead s = (readMaybe s :: Maybe Int) >>= safeValue
+        safeValue x = if elem x [8..12] then Just x else Nothing
 
 strToScore :: String -> (CodeMaker, CodeBreaker)
 strToScore str = bimap CodeMaker CodeBreaker scores
