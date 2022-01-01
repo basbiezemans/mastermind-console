@@ -35,7 +35,7 @@ instance Increment Int where
     inc = (+ 1)
 
 data Game = Game
-    { pattern :: Code
+    { code    :: Code
     , limit   :: Limit
     , counter :: Counter
     , maker   :: CodeMaker
@@ -44,7 +44,7 @@ data Game = Game
 
 makeGame :: Code -> Limit -> (CodeMaker, CodeBreaker) -> Game
 makeGame code limit players = Game
-    { pattern = code
+    { code    = code
     , limit   = limit
     , counter = Counter 1
     , maker   = fst players

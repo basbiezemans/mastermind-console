@@ -99,7 +99,7 @@ play game = do
 
 continue :: Game -> Guess -> IO ()
 continue game guess = do
-    let result = resultOf guess $ pattern game
+    let result = resultOf guess $ code game
     if isCorrect result || endOf game then do
         let game' = update game result
         store game' ".mastermind"
@@ -115,10 +115,9 @@ explain game = do
 recap :: Game -> Result -> IO ()
 recap game result = do
     let (mPoints, bPoints) = getScoreVals game
-    let patt = pattern game
     case result of
         Correct   -> putStrLn "You won!"
-        InCorrect -> putStrLn $ "You lost. The answer was " ++ show patt
+        InCorrect -> putStrLn $ "You lost. The answer was " ++ show (code game)
     newline
     putStr $ "The score is: " ++ show bPoints ++ " (You) / "
     putStrLn $ show mPoints ++ " (Code Maker)"
@@ -134,12 +133,11 @@ recap game result = do
 evaluate :: Game -> Guess -> IO ()
 evaluate game guess = do
     let count = unCounter $ counter game
-    let patt = pattern game
     putStrLn $ "Turn: #" ++ show count
-    putStrLn $ "Hint: " ++ hint guess patt
+    putStrLn $ "Hint: " ++ hint guess (code game)
     when (count == 5) $ do
         putStr "Hint: the sum of the digits in the code is "
-        putStrLn $ show $ sum $ codeToList patt
+        putStrLn $ show $ sum $ codeToList (code game)
     play $ incCounter game
 
 store :: Game -> String -> IO ()
