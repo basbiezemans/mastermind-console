@@ -79,8 +79,7 @@ askCode question = do
     newline
     putStr question
     hFlush stdout
-    input <- getLine
-    return (makeCode input)
+    makeCode <$> getLine
 
 -- | Generate a random 4 digit code, where each digit is between 1 and 6
 generateCode :: IO Code
