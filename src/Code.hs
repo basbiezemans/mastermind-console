@@ -5,8 +5,8 @@ module Code
     , codeToList
     ) where
 
-import Data.Char
-import Data.Maybe
+import Data.Char (digitToInt, intToDigit, isDigit)
+import Data.Maybe ()
 
 data Code = Code Int Int Int Int
             deriving (Eq)

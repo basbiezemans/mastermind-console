@@ -10,7 +10,7 @@ module Game
     , makeGame
     ) where
 
-import Code
+import Code (Code)
 
 newtype Limit = Limit
     { unLimit :: Int

@@ -13,11 +13,11 @@ has the correct position, and zero that it doesn't.
 module Main (main) where
 
 import System.Random (randomRIO)
-import System.IO
-import System.Exit
-import System.Directory
+import System.IO (hFlush, stdout)
+import System.Exit (exitSuccess)
+import System.Directory (doesFileExist)
 import System.Environment (getArgs)
-import Data.Maybe
+import Data.Maybe ()
 import Control.Monad (when)
 import Lib
 import Game
@@ -49,7 +49,7 @@ version :: IO ()
 version = putStrLn "Mastermind v0.1"
 
 exit :: IO ()
-exit = exitWith ExitSuccess
+exit = exitSuccess
 
 splash :: IO ()
 splash = do
