@@ -8,6 +8,8 @@ import Text.Read (readMaybe)
 import Game
 import Code
 
+type Guess = Code
+
 data Result = Correct
             | InCorrect
             deriving (Show)
@@ -33,7 +35,7 @@ addCodeMakerPoint game = game { maker = inc $ maker game }
 addCodeBreakerPoint :: Game -> Game
 addCodeBreakerPoint game = game { breaker = inc $ breaker game }
 
-resultOf :: Code -> Code -> Result
+resultOf :: Guess -> Code -> Result
 resultOf c1 c2 = if c1 == c2 then Correct else InCorrect
 
 isCorrect :: Result -> Bool
@@ -41,7 +43,7 @@ isCorrect Correct   = True
 isCorrect InCorrect = False
 
 -- | Take two codes and return a hint which shows how many digits match and/or are included
-hint :: Code -> Code -> String
+hint :: Guess -> Code -> String
 hint guess code = hintToString $ ones ++ zeros
     where
         pairs = zip (codeToList guess) (codeToList code)

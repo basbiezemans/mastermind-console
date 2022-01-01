@@ -98,7 +98,7 @@ play game = do
         Nothing   -> explain game
         Just code -> continue game code
 
-continue :: Game -> Code -> IO ()
+continue :: Game -> Guess -> IO ()
 continue game guess = do
     let result = resultOf guess $ pattern game
     if isCorrect result || endOf game then do
@@ -132,7 +132,7 @@ recap game result = do
         'n' -> newline
         _   -> newGame $ limit game
 
-evaluate :: Game -> Code -> IO ()
+evaluate :: Game -> Guess -> IO ()
 evaluate game guess = do
     let count = unCounter $ counter game
     let patt = pattern game
