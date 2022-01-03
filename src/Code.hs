@@ -16,12 +16,11 @@ instance Show Code where
 
 -- | Smart constructor. Does not allow digits other than 1..6
 makeCode :: String -> Maybe Code
-makeCode str = if isValid guess then listToCode guess else Nothing
+makeCode = listToCode . map digitToInt . strToDigits
     where
-        guess = map digitToInt $ filter isDigit str
-        valid x = elem x [1..6]
-        isValid xs = length xs == codeLen && all valid xs
-
+        strToDigits = filter isValidDigit
+        isValidDigit x = isDigit x && elem x ['1'..'6']
+        
 codeLen :: Int
 codeLen = 4
 
@@ -29,5 +28,5 @@ codeToList :: Code -> [Int]
 codeToList (Code a b c d) = [a, b, c, d]
 
 listToCode :: [Int] -> Maybe Code
-listToCode (a:b:c:d:_) = Just (Code a b c d)
-listToCode _ = Nothing
+listToCode [a,b,c,d] = Just (Code a b c d)
+listToCode _         = Nothing
