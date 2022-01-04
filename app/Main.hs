@@ -94,8 +94,8 @@ play :: Game -> IO ()
 play game = do
     guess <- askCode "Guess: "
     case guess of
-        Nothing   -> explain game
-        Just code -> continue game code
+        Nothing -> explain game
+        Just code -> continue game (Guess code)
 
 continue :: Game -> Guess -> IO ()
 continue game guess = do

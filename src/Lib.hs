@@ -8,11 +8,11 @@ import Text.Read (readMaybe)
 import Game
 import Code
 
-type Guess = Code
+newtype Guess = Guess { unGuess :: Code }
+    deriving Show
 
-data Result = Correct
-            | InCorrect
-            deriving (Show)
+data Result = Correct | InCorrect
+    deriving Show
 
 getScoreVals :: Game -> (Int, Int)
 getScoreVals game = (getMakerPoints m, getBreakerPoints b)
@@ -36,7 +36,7 @@ addCodeBreakerPoint :: Game -> Game
 addCodeBreakerPoint game = game { breaker = inc $ breaker game }
 
 resultOf :: Guess -> Code -> Result
-resultOf c1 c2 = if c1 == c2 then Correct else InCorrect
+resultOf guess code = if unGuess guess == code then Correct else InCorrect
 
 isCorrect :: Result -> Bool
 isCorrect Correct   = True
@@ -46,7 +46,7 @@ isCorrect InCorrect = False
 hint :: Code -> Guess -> String
 hint code guess = hintToString $ ones ++ zeros
     where
-        pairs = zip (codeToList code) (codeToList guess)
+        pairs = zip (codeToList code) (codeToList $ unGuess guess)
         pair = unzip $ filter (uncurry (/=)) pairs
         n = codeLen - length (fst pair)
         ones = replicate n 1

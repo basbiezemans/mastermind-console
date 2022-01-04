@@ -4,7 +4,7 @@ import Code
 
 testHint_Non_Duplicate_Digits :: Test
 testHint_Non_Duplicate_Digits = 
-    TestCase $ assertEqual msg ans $ hint code guess
+    TestCase $ assertEqual msg ans $ hint code (Guess guess)
     where
         code  = Code 6 2 4 3
         guess = Code 1 2 3 4
@@ -16,7 +16,7 @@ testHint_Non_Duplicate_Digits =
 
 testHint_Duplicate_Digits_No1 :: Test
 testHint_Duplicate_Digits_No1 =
-    TestCase $ assertEqual msg ans $ hint code guess
+    TestCase $ assertEqual msg ans $ hint code (Guess guess)
     where
         code  = Code 6 2 4 3
         guess = Code 6 2 2 5
@@ -25,7 +25,7 @@ testHint_Duplicate_Digits_No1 =
 
 testHint_Duplicate_Digits_No2 :: Test
 testHint_Duplicate_Digits_No2 =
-    TestCase $ assertEqual msg ans $ hint code guess
+    TestCase $ assertEqual msg ans $ hint code (Guess guess)
     where
         code  = Code 5 2 5 6
         guess = Code 2 2 4 4
@@ -34,7 +34,7 @@ testHint_Duplicate_Digits_No2 =
 
 testHint_Duplicate_Digits_No3 :: Test
 testHint_Duplicate_Digits_No3 =
-    TestCase $ assertEqual msg ans $ hint code guess
+    TestCase $ assertEqual msg ans $ hint code (Guess guess)
     where
         code  = Code 6 4 4 3
         guess = Code 4 1 2 4
@@ -43,7 +43,7 @@ testHint_Duplicate_Digits_No3 =
 
 testHint_Duplicate_Digits_No4 :: Test
 testHint_Duplicate_Digits_No4 =
-    TestCase $ assertEqual msg ans $ hint code guess
+    TestCase $ assertEqual msg ans $ hint code (Guess guess)
     where
         code  = Code 6 4 2 3
         guess = Code 2 2 5 2
