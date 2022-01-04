@@ -43,10 +43,10 @@ isCorrect Correct   = True
 isCorrect InCorrect = False
 
 -- | Take two codes and return a hint which shows how many digits match and/or are included
-hint :: Guess -> Code -> String
-hint guess code = hintToString $ ones ++ zeros
+hint :: Code -> Guess -> String
+hint code guess = hintToString $ ones ++ zeros
     where
-        pairs = zip (codeToList guess) (codeToList code)
+        pairs = zip (codeToList code) (codeToList guess)
         pair = unzip $ filter (uncurry (/=)) pairs
         n = codeLen - length (fst pair)
         ones = replicate n 1

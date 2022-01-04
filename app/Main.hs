@@ -134,7 +134,7 @@ evaluate :: Game -> Guess -> IO ()
 evaluate game guess = do
     let count = unCounter $ counter game
     putStrLn $ "Turn: #" ++ show count
-    putStrLn $ "Hint: " ++ hint guess (code game)
+    putStrLn $ "Hint: " ++ hint (code game) guess
     when (count == 5) $ do
         putStr "Hint: the sum of the digits in the code is "
         putStrLn $ show $ sum $ codeToList (code game)
