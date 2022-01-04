@@ -16,9 +16,9 @@ instance Show Code where
 
 -- | Smart constructor. Does not allow digits other than 1..6
 makeCode :: String -> Maybe Code
-makeCode = listToCode . map digitToInt . strToDigits
+makeCode = listToCode . map digitToInt . selectDigits
     where
-        strToDigits = filter isValidDigit
+        selectDigits = filter isValidDigit
         isValidDigit x = isDigit x && elem x ['1'..'6']
         
 codeLen :: Int
