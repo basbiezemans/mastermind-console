@@ -1,6 +1,7 @@
 import Test.HUnit
 import Lib
 import Code
+import Game
 
 testHint_Non_Duplicate_Digits :: Test
 testHint_Non_Duplicate_Digits = 
@@ -50,6 +51,48 @@ testHint_Duplicate_Digits_No4 =
         ans   = "0"
         msg   = "Test Duplicate Digits #4"
 
+testMakeCode_Correct_No1 :: Test
+testMakeCode_Correct_No1 =
+    TestCase $ assertEqual msg ans $ makeCode "1234"
+    where
+        ans = Just $ Code 1 2 3 4
+        msg = "Test correct code #1"
+
+testMakeCode_Correct_No2 :: Test
+testMakeCode_Correct_No2 =
+    TestCase $ assertEqual msg ans $ makeCode "6543"
+    where
+        ans = Just $ Code 6 5 4 3
+        msg = "Test correct code #2"
+
+testMakeCode_Too_Short :: Test
+testMakeCode_Too_Short =
+    TestCase $ assertEqual msg ans $ makeCode "123"
+    where
+        ans = Nothing
+        msg = "Test incorrect code: too short"
+
+testMakeCode_Too_Long :: Test
+testMakeCode_Too_Long =
+    TestCase $ assertEqual msg ans $ makeCode "12345"
+    where
+        ans = Nothing
+        msg = "Test incorrect code: too long"
+
+testMakeCode_Non_Digits :: Test
+testMakeCode_Non_Digits =
+    TestCase $ assertEqual msg ans $ makeCode "12e3"
+    where
+        ans = Nothing
+        msg = "Test incorrect code: non digits"
+
+testMakeCode_Invalid_Digits :: Test
+testMakeCode_Invalid_Digits =
+    TestCase $ assertEqual msg ans $ makeCode "0237"
+    where
+        ans = Nothing
+        msg = "Test incorrect code: invalid digits"
+
 main :: IO Counts
 main = runTestTT $ TestList
     [ testHint_Non_Duplicate_Digits
@@ -57,4 +100,10 @@ main = runTestTT $ TestList
     , testHint_Duplicate_Digits_No2
     , testHint_Duplicate_Digits_No3
     , testHint_Duplicate_Digits_No4
+    , testMakeCode_Correct_No1
+    , testMakeCode_Correct_No2
+    , testMakeCode_Too_Short
+    , testMakeCode_Too_Long
+    , testMakeCode_Non_Digits
+    , testMakeCode_Invalid_Digits
     ]
