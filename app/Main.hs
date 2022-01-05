@@ -115,9 +115,9 @@ explain game = do
 recap :: Game -> Result -> IO ()
 recap game result = do
     let (mPoints, bPoints) = getScoreVals game
-    case result of
-        Correct   -> putStrLn "You won!"
-        InCorrect -> putStrLn $ "You lost. The answer was " ++ show (code game)
+    putStrLn $ case result of
+        Correct   -> "You won!"
+        InCorrect -> "You lost. The answer was " ++ show (code game)
     newline
     putStr $ "The score is: " ++ show bPoints ++ " (You) / "
     putStrLn $ show mPoints ++ " (Code Maker)"
