@@ -48,7 +48,7 @@ hint code guess = hintToString $ ones ++ zeros
     where
         pairs = zip (codeToList code) (codeToList $ unGuess guess)
         pair = unzip $ filter (uncurry (/=)) pairs
-        n = codeLen - length (fst pair)
+        n = length (codeToList code) - length (fst pair)
         ones = replicate n 1
         m = length $ uncurry intersect pair
         zeros = replicate m 0

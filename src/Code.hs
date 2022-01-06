@@ -1,7 +1,6 @@
 module Code
     ( Code (Code)
     , makeCode
-    , codeLen
     , codeToList
     ) where
 
@@ -21,9 +20,6 @@ makeCode = listToCode . map digitToInt . selectDigits
         selectDigits = filter isValidDigit
         isValidDigit x = isDigit x && elem x ['1'..'6']
         
-codeLen :: Int
-codeLen = 4
-
 codeToList :: Code -> [Int]
 codeToList (Code a b c d) = [a, b, c, d]
 
