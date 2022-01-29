@@ -11,7 +11,7 @@ data Code = Code Int Int Int Int
             deriving (Eq)
 
 instance Show Code where
-    show (Code a b c d) = map intToDigit [a, b, c, d]
+    show = map intToDigit . codeToList
 
 -- | Smart constructor. Does not allow digits other than 1..6
 makeCode :: String -> Maybe Code
