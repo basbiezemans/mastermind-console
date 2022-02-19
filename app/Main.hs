@@ -17,8 +17,8 @@ import System.IO (hFlush, stdout)
 import System.Exit (exitSuccess)
 import System.Directory (doesFileExist)
 import System.Environment (getArgs)
-import Data.Maybe ()
-import Control.Monad (when)
+import Data.Maybe (fromJust)
+import Control.Monad (when, replicateM)
 import Lib
 import Game
 import Code
@@ -84,11 +84,8 @@ askCode question = do
 -- | Generate a random 4 digit code, where each digit is between 1 and 6
 generateCode :: IO Code
 generateCode = do
-    a <- randomRIO (1,6)
-    b <- randomRIO (1,6)
-    c <- randomRIO (1,6)
-    d <- randomRIO (1,6)
-    return (Code a b c d)
+    rInts <- replicateM 4 (randomRIO (1,6) :: IO Int)
+    return (fromJust $ listToCode rInts)
 
 play :: Game -> IO ()
 play game = do
