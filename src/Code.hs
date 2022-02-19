@@ -1,7 +1,8 @@
 module Code
-    ( Code (Code)
+    ( Code
     , makeCode
     , codeToList
+    , listToCode
     ) where
 
 import Data.Char (digitToInt, intToDigit, isDigit)
