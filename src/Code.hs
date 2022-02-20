@@ -1,8 +1,8 @@
 module Code
     ( Code
-    , makeCode
-    , codeToList
-    , listToCode
+    , fromString
+    , toList
+    , fromList
     ) where
 
 import Data.Char (digitToInt, intToDigit, isDigit)
@@ -12,18 +12,18 @@ data Code = Code Int Int Int Int
             deriving (Eq)
 
 instance Show Code where
-    show = map intToDigit . codeToList
+    show = map intToDigit . toList
 
 -- | Smart constructor. Does not allow digits other than 1..6
-makeCode :: String -> Maybe Code
-makeCode = listToCode . map digitToInt . selectDigits
+fromString :: String -> Maybe Code
+fromString = fromList . map digitToInt . selectDigits
     where
         selectDigits = filter isValidDigit
         isValidDigit x = isDigit x && elem x ['1'..'6']
         
-codeToList :: Code -> [Int]
-codeToList (Code a b c d) = [a, b, c, d]
+toList :: Code -> [Int]
+toList (Code a b c d) = [a, b, c, d]
 
-listToCode :: [Int] -> Maybe Code
-listToCode [a,b,c,d] = Just (Code a b c d)
-listToCode _         = Nothing
+fromList :: [Int] -> Maybe Code
+fromList [a,b,c,d] = Just (Code a b c d)
+fromList _         = Nothing

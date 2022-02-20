@@ -79,13 +79,13 @@ askCode question = do
     newline
     putStr question
     hFlush stdout
-    Secret.makeCode <$> getLine
+    Secret.fromString <$> getLine
 
 -- | Generate a random 4 digit code, where each digit is between 1 and 6
 generateCode :: IO Secret.Code
 generateCode = do
     rInts <- replicateM 4 (randomRIO (1,6) :: IO Int)
-    return (fromJust $ Secret.listToCode rInts)
+    return (fromJust $ Secret.fromList rInts)
 
 play :: Game -> IO ()
 play game = do
@@ -134,7 +134,7 @@ evaluate game guess = do
     putStrLn $ "Hint: " ++ hint (code game) guess
     when (count == 5) $ do
         putStr "Hint: the sum of the digits in the code is "
-        putStrLn $ show $ sum $ Secret.codeToList (code game)
+        putStrLn $ show $ sum $ Secret.toList (code game)
     play $ incCounter game
 
 store :: Game -> String -> IO ()
