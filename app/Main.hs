@@ -134,7 +134,7 @@ evaluate game guess = do
     putStrLn $ "Hint: " ++ hint (code game) guess
     when (count == 5) $ do
         putStr "Hint: the sum of the digits in the code is "
-        putStrLn $ show $ sum $ Secret.toList (code game)
+        print (sum $ Secret.toList (code game))
     play $ incCounter game
 
 store :: Game -> String -> IO ()
