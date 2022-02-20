@@ -21,7 +21,7 @@ import Data.Maybe (fromJust)
 import Control.Monad (when, replicateM)
 import Lib
 import Game
-import qualified Code as Secret
+import qualified Code
 import qualified Strict
 
 main :: IO ()
@@ -74,18 +74,18 @@ newGame limit = do
 newline :: IO ()
 newline = putChar '\n'
 
-askCode :: String -> IO (Maybe Secret.Code)
+askCode :: String -> IO (Maybe Code.Code)
 askCode question = do
     newline
     putStr question
     hFlush stdout
-    Secret.fromString <$> getLine
+    Code.fromString <$> getLine
 
 -- | Generate a random 4 digit code, where each digit is between 1 and 6
-generateCode :: IO Secret.Code
+generateCode :: IO Code.Code
 generateCode = do
     rInts <- replicateM 4 (randomRIO (1,6) :: IO Int)
-    return (fromJust $ Secret.fromList rInts)
+    return (fromJust $ Code.fromList rInts)
 
 play :: Game -> IO ()
 play game = do
@@ -134,7 +134,7 @@ evaluate game guess = do
     putStrLn $ "Hint: " ++ hint (code game) guess
     when (count == 5) $ do
         putStr "Hint: the sum of the digits in the code is "
-        print (sum $ Secret.toList (code game))
+        print (sum $ Code.toList (code game))
     play $ incCounter game
 
 store :: Game -> String -> IO ()
