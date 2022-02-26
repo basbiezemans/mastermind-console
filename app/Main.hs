@@ -21,6 +21,7 @@ import Data.Maybe (fromJust)
 import Control.Monad (when, replicateM)
 import Lib
 import Game
+import qualified Score
 import qualified Code
 import qualified Strict
 
@@ -69,7 +70,7 @@ newGame limit = do
     code <- generateCode
     mstr <- retrieve ".mastermind"
     play $ makeGame code limit $
-        maybe (CodeMaker 0, CodeBreaker 0) strToScore mstr
+        maybe Score.init Score.fromString mstr
 
 newline :: IO ()
 newline = putChar '\n'
@@ -111,13 +112,14 @@ explain game = do
 
 recap :: Game -> Result -> IO ()
 recap game result = do
-    let (mPoints, bPoints) = getScoreVals game
+    let points = players game
     putStrLn $ case result of
         Correct   -> "You won!"
         InCorrect -> "You lost. The answer was " ++ show (code game)
     newline
-    putStr $ "The score is: " ++ show bPoints ++ " (You) / "
-    putStrLn $ show mPoints ++ " (Code Maker)"
+    putStr "The score is: "
+    putStr $ show (Score.codeBreaker points) ++ " (You) / "
+    putStrLn $ show (Score.codeMaker points) ++ " (Code Maker)"
     newline
     putStr "Would you like to play again? (Y/n) (default is Y): "
     hFlush stdout
@@ -138,7 +140,7 @@ evaluate game guess = do
     play $ incCounter game
 
 store :: Game -> String -> IO ()
-store game filePath = writeFile filePath $ show $ getScoreVals game
+store game filePath = writeFile filePath (Score.toString $ players game)
 
 retrieve :: String -> IO (Maybe String)
 retrieve filePath = do
