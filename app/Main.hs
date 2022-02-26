@@ -70,7 +70,7 @@ newGame limit = do
     code <- generateCode
     mstr <- retrieve ".mastermind"
     play $ makeGame code limit $
-        maybe Score.init Score.fromString mstr
+        maybe Score.initial Score.fromString mstr
 
 newline :: IO ()
 newline = putChar '\n'

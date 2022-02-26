@@ -7,8 +7,8 @@ import Game
 
 type Score = (CodeMaker, CodeBreaker)
 
-init :: Score
-init = (CodeMaker 0, CodeBreaker 0)
+initial :: Score
+initial = (CodeMaker 0, CodeBreaker 0)
 
 toString :: Score -> String
 toString score = show ( codeMaker score
