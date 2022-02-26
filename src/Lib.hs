@@ -14,12 +14,6 @@ newtype Guess = Guess { unGuess :: Code }
 data Result = Correct | InCorrect
     deriving Show
 
-getScoreVals :: Game -> (Int, Int)
-getScoreVals game = (getMakerPoints m, getBreakerPoints b)
-    where
-        m = maker game
-        b = breaker game
-
 update :: Game -> Result -> Game
 update game result =
     case result of
@@ -66,9 +60,3 @@ makeLimit default' str =
     where
         safeRead s = (readMaybe s :: Maybe Int) >>= safeValue
         safeValue x = if elem x [8..12] then Just x else Nothing
-
-strToScore :: String -> (CodeMaker, CodeBreaker)
-strToScore str = bimap CodeMaker CodeBreaker scores
-    where
-        scores = fromMaybe (0,0) $ safeRead str
-        safeRead s = readMaybe s :: Maybe (Int, Int)
