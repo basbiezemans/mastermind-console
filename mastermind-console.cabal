@@ -20,7 +20,7 @@ library
 executable mastermind-console
     main-is: Main.hs
     other-modules:
-        Lib, Game, Code, Strict
+        Lib, Game, Code, Strict, Score
     hs-source-dirs:
         app,
         src
