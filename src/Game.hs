@@ -7,6 +7,7 @@ module Game
     , CodeMaker (..)
     , CodeBreaker (..)
     , inc
+    , players
     , makeGame
     ) where
 
@@ -42,7 +43,9 @@ data Game = Game
     , breaker :: CodeBreaker
     }
 
-makeGame :: Code -> Limit -> (CodeMaker, CodeBreaker) -> Game
+type Players = (CodeMaker, CodeBreaker)
+
+makeGame :: Code -> Limit -> Players -> Game
 makeGame code limit players = Game
     { code    = code
     , limit   = limit
@@ -50,3 +53,6 @@ makeGame code limit players = Game
     , maker   = fst players
     , breaker = snd players
     }
+
+players :: Game -> Players
+players game = (maker game, breaker game)
