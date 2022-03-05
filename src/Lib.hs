@@ -3,7 +3,6 @@ module Lib where
 import Data.List (intersperse, intersect)
 import Data.Char (intToDigit)
 import Data.Maybe (fromMaybe)
-import Data.Bifunctor (bimap)
 import Text.Read (readMaybe)
 import Game
 import Code
