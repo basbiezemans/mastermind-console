@@ -6,9 +6,12 @@ module Game
     , Counter (..)
     , CodeMaker (..)
     , CodeBreaker (..)
-    , inc
     , players
     , makeGame
+    , endOf
+    , incCounter
+    , addCodeMakerPoint
+    , addCodeBreakerPoint
     ) where
 
 import Code (Code)
@@ -56,3 +59,15 @@ makeGame code limit players = Game
 
 players :: Game -> Players
 players game = (maker game, breaker game)
+
+endOf :: Game -> Bool
+endOf game = unLimit (limit game) == unCounter (counter game)
+
+incCounter :: Game -> Game
+incCounter game = game { counter = inc $ counter game }
+
+addCodeMakerPoint :: Game -> Game
+addCodeMakerPoint game = game { maker = inc $ maker game }
+
+addCodeBreakerPoint :: Game -> Game
+addCodeBreakerPoint game = game { breaker = inc $ breaker game }

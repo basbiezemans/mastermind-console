@@ -19,15 +19,6 @@ update game result =
         Correct -> addCodeBreakerPoint game
         InCorrect -> addCodeMakerPoint game
 
-incCounter :: Game -> Game
-incCounter game = game { counter = inc $ counter game }
-
-addCodeMakerPoint :: Game -> Game
-addCodeMakerPoint game = game { maker = inc $ maker game }
-
-addCodeBreakerPoint :: Game -> Game
-addCodeBreakerPoint game = game { breaker = inc $ breaker game }
-
 resultOf :: Guess -> Code -> Result
 resultOf guess code = if unGuess guess == code then Correct else InCorrect
 
@@ -49,9 +40,6 @@ hint code guess = hintToString $ ones ++ zeros
 hintToString :: [Int] -> String
 hintToString [] = "no matching digits"
 hintToString xs = intersperse ',' $ map intToDigit xs
-
-endOf :: Game -> Bool
-endOf game = unLimit (limit game) == unCounter (counter game)
 
 makeLimit :: Int -> String -> Limit
 makeLimit default' str =
