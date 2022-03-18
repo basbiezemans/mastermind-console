@@ -1,27 +1,30 @@
 module Score where
 
-import Data.Bifunctor (bimap)
 import Data.Maybe (fromMaybe)
 import Text.Read (readMaybe)
 import Game
 
-type Score = (CodeMaker, CodeBreaker)
+makeScore :: Int -> Int -> Score
+makeScore p1 p2 = Score
+    { _codeMaker = p1
+    , _codeBreaker = p2
+    }
 
 initial :: Score
-initial = (CodeMaker 0, CodeBreaker 0)
+initial = makeScore 0 0
 
 toString :: Score -> String
 toString score = show ( codeMaker score
                       , codeBreaker score )
 
 fromString :: String -> Score
-fromString = bimap CodeMaker CodeBreaker . scoreVals
+fromString = uncurry makeScore . scoreVals
     where
         scoreVals = fromMaybe (0,0) . safeRead
         safeRead s = readMaybe s :: Maybe (Int, Int)
 
 codeMaker :: Score -> Int
-codeMaker = getMakerPoints . fst
+codeMaker = _codeMaker
 
 codeBreaker :: Score -> Int
-codeBreaker = getBreakerPoints . snd
+codeBreaker = _codeBreaker

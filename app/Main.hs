@@ -97,7 +97,7 @@ play game = do
 
 continue :: Game -> Guess -> IO ()
 continue game guess = do
-    let result = resultOf guess $ code game
+    let result = resultOf guess (_code game)
     if isCorrect result || endOf game then do
         let game' = update game result
         store game' ".mastermind"
@@ -112,10 +112,10 @@ explain game = do
 
 recap :: Game -> Result -> IO ()
 recap game result = do
-    let points = players game
+    let points = _score game
     putStrLn $ case result of
         Correct   -> "You won!"
-        InCorrect -> "You lost. The answer was " ++ show (code game)
+        InCorrect -> "You lost. The answer was " ++ show (_code game)
     newline
     putStr "The score is: "
     putStr $ show (Score.codeBreaker points) ++ " (You) / "
@@ -127,20 +127,20 @@ recap game result = do
     newline
     case choice of
         'n' -> newline
-        _   -> newGame $ limit game
+        _   -> newGame $ _config game
 
 evaluate :: Game -> Guess -> IO ()
 evaluate game guess = do
-    let count = unCounter $ counter game
-    putStrLn $ "Turn: #" ++ show count
-    putStrLn $ "Hint: " ++ hint (code game) guess
-    when (count == 5) $ do
+    let counter = _counter game
+    putStrLn $ "Turn: #" ++ show counter
+    putStrLn $ "Hint: " ++ hint (_code game) guess
+    when (_value counter == 5) $ do
         putStr "Hint: the sum of the digits in the code is "
-        print (sum $ Code.toList (code game))
+        print (sum $ Code.toList (_code game))
     play $ incCounter game
 
 store :: Game -> String -> IO ()
-store game filePath = writeFile filePath (Score.toString $ players game)
+store game filePath = writeFile filePath (Score.toString $ _score game)
 
 retrieve :: String -> IO (Maybe String)
 retrieve filePath = do

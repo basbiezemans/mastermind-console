@@ -1,73 +1,67 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Game
     ( Game (..)
+    , Score (..)
     , Limit (..)
     , Counter (..)
-    , CodeMaker (..)
-    , CodeBreaker (..)
-    , players
     , makeGame
     , endOf
+    , unLimit
     , incCounter
     , addCodeMakerPoint
     , addCodeBreakerPoint
     ) where
 
+import Control.Lens (makeLenses, view, over)
 import Code (Code)
 
 newtype Limit = Limit
-    { unLimit :: Int
+    { _limit :: Int
     } deriving (Show)
 
 newtype Counter = Counter
-    { unCounter :: Int
-    } deriving (Show, Increment)
+    { _value :: Int
+    } deriving (Show)
 
-newtype CodeMaker = CodeMaker
-    { getMakerPoints :: Int
-    } deriving (Show, Increment)
-
-newtype CodeBreaker = CodeBreaker
-    { getBreakerPoints :: Int
-    } deriving (Show, Increment)
-
-class Increment a where
-    inc :: a -> a
-
-instance Increment Int where
-    inc = (+ 1)
+data Score = Score
+    { _codeMaker   :: Int
+    , _codeBreaker :: Int
+    } deriving (Show)
 
 data Game = Game
-    { code    :: Code
-    , limit   :: Limit
-    , counter :: Counter
-    , maker   :: CodeMaker
-    , breaker :: CodeBreaker
+    { _code    :: Code
+    , _score   :: Score
+    , _config  :: Limit
+    , _counter :: Counter
+    } deriving (Show)
+
+makeLenses ''Game
+makeLenses ''Score
+makeLenses ''Limit
+makeLenses ''Counter
+
+makeGame :: Code -> Limit -> Score -> Game
+makeGame _code _config _score = Game
+    { _code    = _code
+    , _score   = _score
+    , _config  = _config
+    , _counter = Counter 1
     }
 
-type Players = (CodeMaker, CodeBreaker)
-
-makeGame :: Code -> Limit -> Players -> Game
-makeGame code limit players = Game
-    { code    = code
-    , limit   = limit
-    , counter = Counter 1
-    , maker   = fst players
-    , breaker = snd players
-    }
-
-players :: Game -> Players
-players game = (maker game, breaker game)
+unLimit :: Limit -> Int
+unLimit = _limit
 
 endOf :: Game -> Bool
-endOf game = unLimit (limit game) == unCounter (counter game)
+endOf = (==) <$> view (config . limit)
+             <*> view (counter . value)
 
 incCounter :: Game -> Game
-incCounter game = game { counter = inc $ counter game }
+incCounter = over (counter . value) (+1)
 
 addCodeMakerPoint :: Game -> Game
-addCodeMakerPoint game = game { maker = inc $ maker game }
+addCodeMakerPoint = over (score . codeMaker) (+1)
 
 addCodeBreakerPoint :: Game -> Game
-addCodeBreakerPoint game = game { breaker = inc $ breaker game }
+addCodeBreakerPoint = over (score . codeBreaker) (+1)
