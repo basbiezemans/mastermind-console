@@ -13,6 +13,16 @@ executable mastermind-console
     hs-source-dirs:
         app,
         src
+    ghc-options:
+        -Wall
+        -Werror
+        -Wcompat
+        -Widentities
+        -Wincomplete-uni-patterns
+        -Wincomplete-record-updates
+        -Wredundant-constraints
+        -Wno-unused-top-binds
+        -Wno-orphans
     build-depends:
         base >=4.7 && <5,
         random,
