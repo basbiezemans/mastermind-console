@@ -1,15 +1,3 @@
-{- |
-MASTERMIND
-
-Mastermind is a code-breaking game for two players. This app simulates
-the role of codemaker. As a codebreaker, you can guess the code by
-entering a four digit number, where each digit is between 1 and 6. The
-app will respond with a hint. This hint will be empty in case non of
-the digits were guessed correctly or filled with a combination of ones
-and zeros for correctly guessed digits. A one indicates that a digit
-has the correct position, and zero that it doesn't.
-
--}
 module Main (main) where
 
 import System.Random (randomRIO)
@@ -99,7 +87,7 @@ play game = do
 continue :: Game -> Guess -> IO ()
 continue game guess = do
     let result = resultOf guess (game ^. secret)
-    if isCorrect result || endOf game then do
+    if isCorrect result || endOf game then
         pure (update game result) >>= store >>= recap result
     else
         evaluate game guess
