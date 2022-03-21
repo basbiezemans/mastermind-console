@@ -1,6 +1,5 @@
 module Score where
 
-import Control.Monad (liftM2)
 import Data.Maybe (fromMaybe)
 import Text.Read (readMaybe)
 import Game
@@ -13,9 +12,6 @@ makeScore p1 p2 = Score
 
 initial :: Score
 initial = makeScore 0 0
-
-toString :: Score -> String
-toString = show . liftM2 (,) codeMaker codeBreaker
 
 fromString :: String -> Score
 fromString = uncurry makeScore . scoreVals

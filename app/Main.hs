@@ -141,7 +141,7 @@ evaluate game guess = do
     play $ incCounter game
 
 store :: Game -> String -> IO ()
-store game filePath = writeFile filePath (Score.toString $ game ^. score)
+store game filePath = writeFile filePath (show $ game ^. score)
 
 retrieve :: String -> IO (Maybe String)
 retrieve filePath = do

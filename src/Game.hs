@@ -20,6 +20,7 @@ module Game
     ) where
 
 import Control.Lens (makeLenses, view, over)
+import Control.Monad (liftM2)
 import Code (Code)
 
 newtype Limit = Limit
@@ -33,7 +34,10 @@ newtype Counter = Counter
 data Score = Score
     { _codeMaker   :: Int
     , _codeBreaker :: Int
-    } deriving (Show)
+    }
+
+instance Show Score where
+    show = show . liftM2 (,) _codeMaker _codeBreaker
 
 data Game = Game
     { _secret  :: Code
