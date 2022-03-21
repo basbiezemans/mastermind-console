@@ -69,7 +69,7 @@ newGame limit = do
     splash
     turns $ unLimit limit
     code <- generateCode
-    mstr <- retrieve ".mastermind"
+    mstr <- retrieveScore
     play $ makeGame code limit $
         maybe Score.initial Score.fromString mstr
 
@@ -100,9 +100,7 @@ continue :: Game -> Guess -> IO ()
 continue game guess = do
     let result = resultOf guess (game ^. secret)
     if isCorrect result || endOf game then do
-        let game' = update game result
-        store game' ".mastermind"
-        recap game' result
+        pure (update game result) >>= store >>= recap result
     else
         evaluate game guess
 
@@ -111,8 +109,8 @@ explain game = do
     putStrLn "Please enter 4 digits, where each digit is between 1 and 6, e.g. 1234"
     play game
 
-recap :: Game -> Result -> IO ()
-recap game result = do
+recap :: Result -> Game -> IO ()
+recap result game = do
     putStrLn $ case result of
         Correct   -> "You won!"
         InCorrect -> "You lost. The answer was " ++ show (game ^. secret)
@@ -139,11 +137,16 @@ evaluate game guess = do
         print (sum $ Code.toList (game ^. secret))
     play $ incCounter game
 
-store :: Game -> String -> IO ()
-store game filePath = writeFile filePath (show $ game ^. score)
+filePath :: String
+filePath = ".mastermind"
 
-retrieve :: String -> IO (Maybe String)
-retrieve filePath = do
+store :: Game -> IO Game
+store game = do
+    writeFile filePath (show $ game ^. score)
+    return game
+
+retrieveScore :: IO (Maybe String)
+retrieveScore = do
     fileExists <- doesFileExist filePath
     if fileExists then do
         contents <- Strict.readFile filePath
