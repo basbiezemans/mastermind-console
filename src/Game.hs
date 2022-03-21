@@ -15,6 +15,8 @@ module Game
     , endOf
     , unLimit
     , incCounter
+    , codeMaker
+    , codeBreaker
     , addCodeMakerPoint
     , addCodeBreakerPoint
     ) where

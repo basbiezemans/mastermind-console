@@ -2,7 +2,7 @@ module Score where
 
 import Data.Maybe (fromMaybe)
 import Text.Read (readMaybe)
-import Game
+import Game (Score(..))
 
 makeScore :: Int -> Int -> Score
 makeScore p1 p2 = Score
@@ -18,9 +18,3 @@ fromString = uncurry makeScore . scoreVals
     where
         scoreVals = fromMaybe (0,0) . safeRead
         safeRead s = readMaybe s :: Maybe (Int, Int)
-
-codeMaker :: Score -> Int
-codeMaker = _codeMaker
-
-codeBreaker :: Score -> Int
-codeBreaker = _codeBreaker

@@ -113,14 +113,13 @@ explain game = do
 
 recap :: Game -> Result -> IO ()
 recap game result = do
-    let points = game ^. score
     putStrLn $ case result of
         Correct   -> "You won!"
         InCorrect -> "You lost. The answer was " ++ show (game ^. secret)
     newline
     putStr "The score is: "
-    putStr $ show (Score.codeBreaker points) ++ " (You) / "
-    putStrLn $ show (Score.codeMaker points) ++ " (Code Maker)"
+    putStr $ show (game ^. score . codeBreaker) ++ " (You) / "
+    putStrLn $ show (game ^. score . codeMaker) ++ " (Code Maker)"
     newline
     putStr "Would you like to play again? (Y/n) (default is Y): "
     hFlush stdout
