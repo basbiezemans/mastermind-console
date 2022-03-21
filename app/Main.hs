@@ -18,6 +18,7 @@ import System.Exit (exitSuccess)
 import System.Directory (doesFileExist)
 import System.Environment (getArgs)
 import Data.Maybe (fromJust)
+import Control.Lens ((^.))
 import Control.Monad (when, replicateM)
 import Lib
 import Game
@@ -97,7 +98,7 @@ play game = do
 
 continue :: Game -> Guess -> IO ()
 continue game guess = do
-    let result = resultOf guess (_code game)
+    let result = resultOf guess (game ^. secret)
     if isCorrect result || endOf game then do
         let game' = update game result
         store game' ".mastermind"
@@ -112,10 +113,10 @@ explain game = do
 
 recap :: Game -> Result -> IO ()
 recap game result = do
-    let points = _score game
+    let points = game ^. score
     putStrLn $ case result of
         Correct   -> "You won!"
-        InCorrect -> "You lost. The answer was " ++ show (_code game)
+        InCorrect -> "You lost. The answer was " ++ show (game ^. secret)
     newline
     putStr "The score is: "
     putStr $ show (Score.codeBreaker points) ++ " (You) / "
@@ -127,20 +128,20 @@ recap game result = do
     newline
     case choice of
         'n' -> newline
-        _   -> newGame $ _config game
+        _   -> newGame $ game ^. config
 
 evaluate :: Game -> Guess -> IO ()
 evaluate game guess = do
-    let counter = _counter game
-    putStrLn $ "Turn: #" ++ show counter
-    putStrLn $ "Hint: " ++ hint (_code game) guess
-    when (_value counter == 5) $ do
+    let turn = game ^. counter . value
+    putStrLn $ "Turn: #" ++ show turn
+    putStrLn $ "Hint: " ++ hint (game ^. secret) guess
+    when (turn == 5) $ do
         putStr "Hint: the sum of the digits in the code is "
-        print (sum $ Code.toList (_code game))
+        print (sum $ Code.toList (game ^. secret))
     play $ incCounter game
 
 store :: Game -> String -> IO ()
-store game filePath = writeFile filePath (Score.toString $ _score game)
+store game filePath = writeFile filePath (Score.toString $ game ^. score)
 
 retrieve :: String -> IO (Maybe String)
 retrieve filePath = do

@@ -7,6 +7,11 @@ module Game
     , Limit (..)
     , Counter (..)
     , makeGame
+    , secret
+    , counter
+    , value
+    , score
+    , config
     , endOf
     , unLimit
     , incCounter
@@ -31,7 +36,7 @@ data Score = Score
     } deriving (Show)
 
 data Game = Game
-    { _code    :: Code
+    { _secret  :: Code
     , _score   :: Score
     , _config  :: Limit
     , _counter :: Counter
@@ -44,7 +49,7 @@ makeLenses ''Counter
 
 makeGame :: Code -> Limit -> Score -> Game
 makeGame _code _config _score = Game
-    { _code    = _code
+    { _secret  = _code
     , _score   = _score
     , _config  = _config
     , _counter = Counter 1
