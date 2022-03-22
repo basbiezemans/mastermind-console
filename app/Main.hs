@@ -118,8 +118,9 @@ recap result game = do
 evaluate :: Game -> Guess -> IO ()
 evaluate game guess = do
     let turn = game ^. counter . value
+    let hint = makeHint (game ^. secret) guess
     putStrLn $ "Turn: #" ++ show turn
-    putStrLn $ "Hint: " ++ hint (game ^. secret) guess
+    putStrLn $ "Hint: " ++ show hint
     when (turn == 5) $ do
         putStr "Hint: the sum of the digits in the code is "
         print (sum $ Code.toList (game ^. secret))

@@ -13,6 +13,12 @@ newtype Guess = Guess { unGuess :: Code }
 data Result = Correct | InCorrect
     deriving Show
 
+newtype Hint = Hint [Int]
+
+instance Show Hint where
+    show (Hint []) = "no matching digits"
+    show (Hint xs) = intersperse ',' $ map intToDigit xs
+
 update :: Game -> Result -> Game
 update game result =
     case result of
@@ -26,9 +32,10 @@ isCorrect :: Result -> Bool
 isCorrect Correct   = True
 isCorrect InCorrect = False
 
--- | Take two codes and return a hint which shows how many digits match and/or are included
-hint :: Code -> Guess -> String
-hint code guess = hintToString $ ones ++ zeros
+-- | Take a secret code and a guess, and return a hint which
+-- shows how many digits match and/or are included in the guess.
+makeHint :: Code -> Guess -> Hint
+makeHint code guess = Hint (ones ++ zeros)
     where
         pairs = zip (toList code) (toList $ unGuess guess)
         pair = unzip $ filter (uncurry (/=)) pairs
@@ -36,10 +43,6 @@ hint code guess = hintToString $ ones ++ zeros
         ones = replicate n 1
         m = length $ uncurry intersect pair
         zeros = replicate m 0
-
-hintToString :: [Int] -> String
-hintToString [] = "no matching digits"
-hintToString xs = intersperse ',' $ map intToDigit xs
 
 makeLimit :: Int -> String -> Limit
 makeLimit default' str =
