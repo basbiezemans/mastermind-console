@@ -99,14 +99,23 @@ explain game = do
 
 recap :: Result -> Game -> IO ()
 recap result game = do
-    putStrLn $ case result of
-        Correct   -> "You won!"
-        InCorrect -> "You lost. The answer was " ++ show (game ^. secret)
+    showWinner result (game ^. secret)
     newline
     putStr "The score is: "
     putStr $ show (game ^. score . codeBreaker) ++ " (You) / "
     putStrLn $ show (game ^. score . codeMaker) ++ " (Code Maker)"
     newline
+    askPlayAgain game
+
+showWinner :: Show a => Result -> a -> IO ()
+showWinner result answer =
+    putStrLn $ if isCorrect result then youWon else youLost
+    where
+        youWon = "You won!"
+        youLost = "You lost. The answer was " ++ show answer
+
+askPlayAgain :: Game -> IO ()
+askPlayAgain game = do
     putStr "Would you like to play again? (Y/n) (default is Y): "
     hFlush stdout
     choice <- getChar
