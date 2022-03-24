@@ -6,10 +6,11 @@ import Lib
 import qualified Code
 import Game
 import Data.Maybe (fromJust)
+import Data.String (String)
 
 testHint_Non_Duplicate_Digits :: Test
 testHint_Non_Duplicate_Digits = 
-    TestCase $ assertEqual msg ans $ hint code (Guess guess)
+    TestCase $ assertEqual msg ans $ mkHint code (Guess guess)
     where
         code  = mkCode 6 2 4 3
         guess = mkCode 1 2 3 4
@@ -21,7 +22,7 @@ testHint_Non_Duplicate_Digits =
 
 testHint_Duplicate_Digits_No1 :: Test
 testHint_Duplicate_Digits_No1 =
-    TestCase $ assertEqual msg ans $ hint code (Guess guess)
+    TestCase $ assertEqual msg ans $ mkHint code (Guess guess)
     where
         code  = mkCode 6 2 4 3
         guess = mkCode 6 2 2 5
@@ -30,7 +31,7 @@ testHint_Duplicate_Digits_No1 =
 
 testHint_Duplicate_Digits_No2 :: Test
 testHint_Duplicate_Digits_No2 =
-    TestCase $ assertEqual msg ans $ hint code (Guess guess)
+    TestCase $ assertEqual msg ans $ mkHint code (Guess guess)
     where
         code  = mkCode 5 2 5 6
         guess = mkCode 2 2 4 4
@@ -39,7 +40,7 @@ testHint_Duplicate_Digits_No2 =
 
 testHint_Duplicate_Digits_No3 :: Test
 testHint_Duplicate_Digits_No3 =
-    TestCase $ assertEqual msg ans $ hint code (Guess guess)
+    TestCase $ assertEqual msg ans $ mkHint code (Guess guess)
     where
         code  = mkCode 6 4 4 3
         guess = mkCode 4 1 2 4
@@ -48,7 +49,7 @@ testHint_Duplicate_Digits_No3 =
 
 testHint_Duplicate_Digits_No4 :: Test
 testHint_Duplicate_Digits_No4 =
-    TestCase $ assertEqual msg ans $ hint code (Guess guess)
+    TestCase $ assertEqual msg ans $ mkHint code (Guess guess)
     where
         code  = mkCode 6 4 2 3
         guess = mkCode 2 2 5 2
@@ -99,6 +100,9 @@ testMakeCode_Invalid_Digits =
 
 mkCode :: Int -> Int -> Int -> Int -> Code.Code
 mkCode a b c d = fromJust $ Code.fromList [a, b, c, d]
+
+mkHint :: Code.Code -> Guess -> String
+mkHint c g = show $ makeHint c g
 
 main :: IO Counts
 main = runTestTT $ TestList
