@@ -125,14 +125,16 @@ askPlayAgain game = do
 
 evaluate :: Game -> Guess -> IO ()
 evaluate game guess = do
-    let turn = game ^. counter . value
-    let hint = makeHint (game ^. secret) guess
     putStrLn $ "Turn: #" ++ show turn
     putStrLn $ "Hint: " ++ show hint
-    when (turn == 5) $ do
+    when (turn == midgame) $ do
         putStr "Hint: the sum of the digits in the code is "
         print (sum $ Code.toList (game ^. secret))
     play $ incCounter game
+    where
+        turn = game ^. counter . value
+        hint = makeHint (game ^. secret) guess
+        midgame = unLimit (game ^. config) `div` 2
 
 filePath :: String
 filePath = ".mastermind"
