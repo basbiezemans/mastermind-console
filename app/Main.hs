@@ -54,8 +54,7 @@ turns n = do
 
 newGame :: Limit -> IO ()
 newGame limit = do
-    splash
-    turns $ unLimit limit
+    splash >> turns (unLimit limit)
     code <- generateCode
     mstr <- retrieveScore
     play $ makeGame code limit $
