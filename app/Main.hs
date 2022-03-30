@@ -117,11 +117,11 @@ askPlayAgain :: Game -> IO ()
 askPlayAgain game = do
     putStr "Would you like to play again? (Y/n) (default is Y): "
     hFlush stdout
-    choice <- getChar
     newline
-    case choice of
-        'n' -> newline
-        _   -> newGame $ game ^. config
+    getChar >>= playAgain
+    where
+        playAgain 'n' = newline
+        playAgain  _  = newGame (game ^. config)
 
 evaluate :: Game -> Guess -> IO ()
 evaluate game guess = do
