@@ -6,7 +6,7 @@ import System.Exit (exitSuccess)
 import System.Directory (doesFileExist)
 import System.Environment (getArgs)
 import Data.Maybe (fromJust)
-import Control.Lens ((^.))
+import Lens.Micro ((^.))
 import Control.Monad (when, replicateM)
 import Lib
 import Game

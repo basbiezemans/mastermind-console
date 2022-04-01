@@ -21,8 +21,10 @@ module Game
     , addCodeBreakerPoint
     ) where
 
-import Control.Lens (makeLenses, view, over)
 import Control.Monad (liftM2)
+import Lens.Micro (over)
+import Lens.Micro.Extras (view)
+import Lens.Micro.TH (makeLenses)
 import Code (Code)
 
 newtype Limit = Limit
