@@ -17,10 +17,10 @@ instance Show Code where
 -- | Smart constructor. Does not allow digits other than 1..6
 fromString :: String -> Maybe Code
 fromString = fromList . map digitToInt . selectDigits
-    where
-        selectDigits = filter isValidDigit
-        isValidDigit x = isDigit x && elem x ['1'..'6']
-        
+  where
+    selectDigits = filter isValidDigit
+    isValidDigit x = isDigit x && elem x ['1'..'6']
+
 toList :: Code -> [Int]
 toList (Code a b c d) = [a, b, c, d]
 

@@ -109,9 +109,9 @@ recap result game = do
 showWinner :: Show a => Result -> a -> IO ()
 showWinner result answer =
     putStrLn $ if isCorrect result then youWon else youLost
-    where
-        youWon = "You won!"
-        youLost = "You lost. The answer was " ++ show answer
+  where
+    youWon = "You won!"
+    youLost = "You lost. The answer was " ++ show answer
 
 askPlayAgain :: Game -> IO ()
 askPlayAgain game = do
@@ -119,9 +119,9 @@ askPlayAgain game = do
     hFlush stdout
     newline
     getChar >>= playAgain
-    where
-        playAgain 'n' = newline
-        playAgain  _  = newGame (game ^. config)
+  where
+    playAgain 'n' = newline
+    playAgain  _  = newGame (game ^. config)
 
 evaluate :: Game -> Guess -> IO ()
 evaluate game guess = do
@@ -131,10 +131,10 @@ evaluate game guess = do
         putStr "Hint: the sum of the digits in the code is "
         print (sum $ Code.toList (game ^. secret))
     play $ incCounter game
-    where
-        turn = game ^. counter . value
-        hint = makeHint (game ^. secret) guess
-        midgame = unLimit (game ^. config) `div` 2
+  where
+    turn = game ^. counter . value
+    hint = makeHint (game ^. secret) guess
+    midgame = unLimit (game ^. config) `div` 2
 
 filePath :: String
 filePath = ".mastermind"

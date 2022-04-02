@@ -15,6 +15,6 @@ initial = makeScore 0 0
 
 fromString :: String -> Score
 fromString = uncurry makeScore . scoreVals
-    where
-        scoreVals = fromMaybe (0,0) . safeRead
-        safeRead s = readMaybe s :: Maybe (Int, Int)
+  where
+    scoreVals = fromMaybe (0,0) . safeRead
+    safeRead s = readMaybe s :: Maybe (Int, Int)
