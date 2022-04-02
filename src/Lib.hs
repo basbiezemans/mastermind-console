@@ -10,20 +10,11 @@ import Code
 newtype Guess = Guess { unGuess :: Code }
     deriving Show
 
-data Result = Correct | InCorrect
-    deriving Show
-
 newtype Hint = Hint [Int]
 
 instance Show Hint where
     show (Hint []) = "no matching digits"
     show (Hint xs) = intersperse ',' $ map intToDigit xs
-
-update :: Game -> Result -> Game
-update game result =
-    case result of
-        Correct -> addCodeBreakerPoint game
-        InCorrect -> addCodeMakerPoint game
 
 resultOf :: Guess -> Code -> Result
 resultOf guess code = if unGuess guess == code then Correct else InCorrect

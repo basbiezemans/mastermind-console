@@ -3,10 +3,12 @@
 
 module Game
     ( Game (..)
+    , Result (..)
     , Score (..)
     , Limit (..)
     , Counter (..)
     , makeGame
+    , update
     , secret
     , counter
     , value
@@ -17,8 +19,6 @@ module Game
     , incCounter
     , codeMaker
     , codeBreaker
-    , addCodeMakerPoint
-    , addCodeBreakerPoint
     ) where
 
 import Control.Monad (liftM2)
@@ -43,6 +43,9 @@ data Score = Score
 instance Show Score where
     show = show . liftM2 (,) _codeMaker _codeBreaker
 
+data Result = Correct | InCorrect
+    deriving (Show)
+
 data Game = Game
     { _secret  :: Code
     , _score   :: Score
@@ -62,6 +65,12 @@ makeGame _code _config _score = Game
     , _config  = _config
     , _counter = Counter 1
     }
+
+update :: Game -> Result -> Game
+update game result =
+    case result of
+        Correct -> addCodeBreakerPoint game
+        InCorrect -> addCodeMakerPoint game
 
 unLimit :: Limit -> Int
 unLimit = _limit
