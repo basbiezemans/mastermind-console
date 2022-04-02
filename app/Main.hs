@@ -9,11 +9,10 @@ import Data.Maybe (fromJust)
 import Lens.Micro ((^.))
 import Control.Monad (when, replicateM)
 import Hint (makeHint)
-import Limit
-import Lib
+import Code
 import Game
+import Limit
 import qualified Score
-import qualified Code
 import qualified Strict
 
 main :: IO ()
@@ -65,7 +64,7 @@ newGame limit = do
 newline :: IO ()
 newline = putChar '\n'
 
-askCode :: String -> IO (Maybe Code.Code)
+askCode :: String -> IO (Maybe Code)
 askCode question = do
     newline
     putStr question
@@ -73,7 +72,7 @@ askCode question = do
     Code.fromString <$> getLine
 
 -- | Generate a random 4 digit code, where each digit is between 1 and 6
-generateCode :: IO Code.Code
+generateCode :: IO Code
 generateCode = do
     rInts <- replicateM 4 (randomRIO (1,6) :: IO Int)
     return (fromJust $ Code.fromList rInts)

@@ -1,5 +1,6 @@
 module Code
-    ( Code
+    ( Guess (..)
+    , Code
     , fromString
     , toList
     , fromList
@@ -13,6 +14,9 @@ data Code = Code Int Int Int Int
 
 instance Show Code where
     show = map intToDigit . toList
+
+newtype Guess = Guess { unGuess :: Code }
+    deriving Show
 
 -- | Smart constructor. Does not allow digits other than 1..6
 fromString :: String -> Maybe Code

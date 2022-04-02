@@ -3,11 +3,9 @@
 
 import Test.HUnit
 import Hint (makeHint)
-import Lib
-import qualified Code
+import Code
 import Game
 import Data.Maybe (fromJust)
-import Data.String (String)
 
 testHint_Non_Duplicate_Digits :: Test
 testHint_Non_Duplicate_Digits = 
@@ -99,10 +97,10 @@ testMakeCode_Invalid_Digits =
         ans = Nothing
         msg = "Test incorrect code: invalid digits"
 
-mkCode :: Int -> Int -> Int -> Int -> Code.Code
+mkCode :: Int -> Int -> Int -> Int -> Code
 mkCode a b c d = fromJust $ Code.fromList [a, b, c, d]
 
-mkHint :: Code.Code -> Guess -> String
+mkHint :: Code -> Guess -> String
 mkHint c g = show $ makeHint c g
 
 main :: IO Counts

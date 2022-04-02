@@ -2,8 +2,7 @@ module Hint where
 
 import Data.List (intersperse, intersect)
 import Data.Char (intToDigit)
-import Code (Code, toList)
-import Lib (Guess(unGuess))
+import Code (Code, toList, Guess, unGuess)
 
 newtype Hint = Hint [Int]
 
