@@ -8,6 +8,8 @@ import System.Environment (getArgs)
 import Data.Maybe (fromJust)
 import Lens.Micro ((^.))
 import Control.Monad (when, replicateM)
+import Hint (makeHint)
+import Limit
 import Lib
 import Game
 import qualified Score

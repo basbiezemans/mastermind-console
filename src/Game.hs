@@ -2,11 +2,9 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Game
-    ( Game (..)
-    , Result (..)
+    ( Result (..)
     , Score (..)
-    , Limit (..)
-    , Counter (..)
+    , Game
     , makeGame
     , update
     , secret
@@ -15,7 +13,6 @@ module Game
     , score
     , config
     , endOf
-    , unLimit
     , incCounter
     , codeMaker
     , codeBreaker
@@ -26,10 +23,7 @@ import Lens.Micro (over)
 import Lens.Micro.Extras (view)
 import Lens.Micro.TH (makeLenses)
 import Code (Code)
-
-newtype Limit = Limit
-    { _limit :: Int
-    } deriving (Show)
+import Limit (Limit(..))
 
 newtype Counter = Counter
     { _value :: Int
@@ -71,9 +65,6 @@ update game result =
     case result of
         Correct -> addCodeBreakerPoint game
         InCorrect -> addCodeMakerPoint game
-
-unLimit :: Limit -> Int
-unLimit = _limit
 
 endOf :: Game -> Bool
 endOf = (==) <$> view (config . limit)

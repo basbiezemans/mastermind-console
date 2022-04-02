@@ -2,6 +2,7 @@
 {-# HLINT ignore "Use camelCase" #-}
 
 import Test.HUnit
+import Hint (makeHint)
 import Lib
 import qualified Code
 import Game
