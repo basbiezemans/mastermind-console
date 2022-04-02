@@ -18,24 +18,16 @@ module Game
     , codeBreaker
     ) where
 
-import Control.Monad (liftM2)
 import Lens.Micro (over)
 import Lens.Micro.Extras (view)
 import Lens.Micro.TH (makeLenses)
 import Code (Code)
 import Limit (Limit(..))
+import Score (Score(..))
 
 newtype Counter = Counter
     { _value :: Int
     } deriving (Show)
-
-data Score = Score
-    { _codeMaker   :: Int
-    , _codeBreaker :: Int
-    }
-
-instance Show Score where
-    show = show . liftM2 (,) _codeMaker _codeBreaker
 
 data Result = Correct | InCorrect
     deriving (Show)

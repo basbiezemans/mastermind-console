@@ -1,8 +1,16 @@
 module Score where
 
+import Control.Monad (liftM2)
 import Data.Maybe (fromMaybe)
 import Text.Read (readMaybe)
-import Game (Score(..))
+
+data Score = Score
+    { _codeMaker   :: Int
+    , _codeBreaker :: Int
+    }
+
+instance Show Score where
+    show = show . liftM2 (,) _codeMaker _codeBreaker
 
 makeScore :: Int -> Int -> Score
 makeScore p1 p2 = Score
