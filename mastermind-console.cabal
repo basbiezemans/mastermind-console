@@ -8,7 +8,8 @@ extra-source-files:
 
 library
     exposed-modules:
-        Game, Code, Strict, Score, Hint, Limit, Utils
+        Game, Code, Strict, Score,
+        Result, Hint, Limit, Utils
     hs-source-dirs:
         src
     build-depends:

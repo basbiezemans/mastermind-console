@@ -12,6 +12,7 @@ import Hint (makeHint)
 import Code
 import Game
 import Limit
+import Result
 import qualified Score
 import qualified Strict
 

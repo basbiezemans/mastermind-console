@@ -16,23 +16,19 @@ module Game
     , incCounter
     , codeMaker
     , codeBreaker
-    , resultOf
-    , isCorrect
     ) where
 
 import Lens.Micro (over)
 import Lens.Micro.Extras (view)
 import Lens.Micro.TH (makeLenses)
-import Code (Code, Guess, unGuess)
+import Code (Code)
 import Limit (Limit(..))
 import Score (Score(..))
+import Result (Result(..))
 
 newtype Counter = Counter
     { _value :: Int
     } deriving (Show)
-
-data Result = Correct | InCorrect
-    deriving (Show)
 
 data Game = Game
     { _secret  :: Code
@@ -72,11 +68,3 @@ addCodeMakerPoint = over (score . codeMaker) (+1)
 
 addCodeBreakerPoint :: Game -> Game
 addCodeBreakerPoint = over (score . codeBreaker) (+1)
-
-resultOf :: Guess -> Code -> Result
-resultOf guess code =
-    if unGuess guess == code then Correct else InCorrect
-
-isCorrect :: Result -> Bool
-isCorrect Correct   = True
-isCorrect InCorrect = False
