@@ -1,7 +1,12 @@
-module Limit where
+module Limit
+    ( Limit (..)
+    , unLimit
+    , limitOr
+    , safeValue
+    ) where
 
-import Data.Maybe (fromMaybe)
 import Text.Read (readMaybe)
+import Utils (ensure)
 
 newtype Limit = Limit
     { _limit :: Int
@@ -10,9 +15,12 @@ newtype Limit = Limit
 unLimit :: Limit -> Int
 unLimit = _limit
 
-makeLimit :: Int -> String -> Limit
-makeLimit default' str =
-    Limit $ fromMaybe default' $ safeRead str
-  where
-    safeRead s = (readMaybe s :: Maybe Int) >>= safeValue
-    safeValue x = if elem x [8..12] then Just x else Nothing
+limitOr :: Int -> Maybe Int -> Limit
+limitOr _  (Just x) = Limit x
+limitOr def Nothing = Limit def
+
+safeRead :: String -> Maybe Int
+safeRead s = readMaybe s :: Maybe Int
+
+safeValue :: String -> Maybe Int
+safeValue s = safeRead s >>= ensure (`elem` [8..12])

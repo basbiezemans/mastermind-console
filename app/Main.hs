@@ -21,7 +21,7 @@ main = getArgs >>= parse
 parse :: [String] -> IO ()
 parse args = case args of
     []            -> newGame $ Limit 10
-    ["-t", n]     -> newGame $ makeLimit 10 n
+    ["-t", n]     -> newGame $ limitOr 10 (safeValue n)
     ["-h"]        -> usage >> exit
     ["-v"]        -> version >> exit
     ["--help"]    -> parse ["-h"]
