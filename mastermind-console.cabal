@@ -27,6 +27,7 @@ executable mastermind-console
         microlens,
         random,
         directory,
+        strict,
         mastermind-console
     ghc-options:
         -Wall

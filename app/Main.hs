@@ -2,6 +2,7 @@ module Main (main) where
 
 import System.Random (randomRIO)
 import System.IO (hFlush, stdout)
+import System.IO.Strict as Strict (readFile)
 import System.Exit (exitSuccess)
 import System.Directory (doesFileExist)
 import System.Environment (getArgs)
@@ -14,7 +15,6 @@ import Game
 import Limit
 import Result
 import qualified Score
-import qualified Strict
 
 main :: IO ()
 main = getArgs >>= parse
