@@ -18,12 +18,8 @@ instance Show Code where
 newtype Guess = Guess { unGuess :: Code }
     deriving Show
 
--- | Smart constructor. Does not allow digits other than 1..6
 fromString :: String -> Maybe Code
 fromString = fromList . map digitToInt . selectDigits
-  where
-    selectDigits = filter isValidDigit
-    isValidDigit x = isDigit x && elem x ['1'..'6']
 
 toList :: Code -> [Int]
 toList (Code a b c d) = [a, b, c, d]
@@ -31,3 +27,9 @@ toList (Code a b c d) = [a, b, c, d]
 fromList :: [Int] -> Maybe Code
 fromList [a,b,c,d] = Just (Code a b c d)
 fromList _         = Nothing
+
+selectDigits :: [Char] -> [Char]
+selectDigits = filter isValidDigit
+
+isValidDigit :: Char -> Bool
+isValidDigit x = isDigit x && elem x ['1'..'6']
