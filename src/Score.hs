@@ -1,4 +1,9 @@
-module Score where
+module Score
+    ( Score (..)
+    , makeScore
+    , initial
+    , fromString
+    ) where
 
 import Control.Monad (liftM2)
 import Data.Maybe (fromMaybe)
@@ -10,7 +15,8 @@ data Score = Score
     }
 
 instance Show Score where
-    show = show . liftM2 (,) _codeMaker _codeBreaker
+    show = show . liftM2 (,) _codeMaker
+                             _codeBreaker
 
 makeScore :: Int -> Int -> Score
 makeScore p1 p2 = Score
@@ -22,7 +28,7 @@ initial :: Score
 initial = makeScore 0 0
 
 fromString :: String -> Score
-fromString = uncurry makeScore . scoreVals
-  where
-    scoreVals = fromMaybe (0,0) . safeRead
-    safeRead s = readMaybe s :: Maybe (Int, Int)
+fromString = uncurry makeScore . readPair
+
+readPair :: String -> (Int, Int)
+readPair = fromMaybe (0,0) . readMaybe
