@@ -6,6 +6,7 @@ module Hint
 import Data.List (intersperse, intersect)
 import Data.Char (intToDigit)
 import Code (Code, toList, Guess, unGuess)
+import Utils ((.:), both)
 
 newtype Hint = Hint [Int]
 
@@ -32,4 +33,7 @@ unequal :: Eq a => [(a, a)] -> [(a, a)]
 unequal = filter (uncurry (/=))
 
 listOfPairs :: Code -> Guess -> [(Int, Int)]
-listOfPairs code guess = zip (toList code) (toList $ unGuess guess)
+listOfPairs = uncurry zip .: pairOfLists
+
+pairOfLists :: Code -> Guess -> ([Int], [Int])
+pairOfLists code guess = both toList (code, unGuess guess)
