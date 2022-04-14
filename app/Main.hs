@@ -89,7 +89,7 @@ continue :: Game -> Guess -> IO ()
 continue game guess = do
     let result = resultOf guess (game ^. secret)
     if isCorrect result || endOf game then
-        pure (update game result) >>= store >>= recap result
+        store (update game result) >>= recap result
     else
         evaluate game guess
 
