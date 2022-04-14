@@ -131,11 +131,12 @@ evaluate game guess = do
     putStrLn $ "Hint: " ++ show hint
     when (turn == midgame) $ do
         putStr "Hint: the sum of the digits in the code is "
-        print (sum $ Code.toList (game ^. secret))
+        print (sum digits)
     play $ incCounter game
   where
     turn = game ^. counter . value
     hint = makeHint (game ^. secret) guess
+    digits = Code.toList (game ^. secret)
     midgame = unLimit (game ^. config) `div` 2
 
 filePath :: String
