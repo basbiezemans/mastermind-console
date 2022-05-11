@@ -10,13 +10,13 @@ import Data.Char (digitToInt, intToDigit, isDigit)
 import Data.Maybe ()
 
 data Code = Code Int Int Int Int
-            deriving (Eq)
+    deriving (Eq)
 
 instance Show Code where
     show = map intToDigit . toList
 
 newtype Guess = Guess { unGuess :: Code }
-    deriving Show
+    deriving (Show)
 
 fromString :: String -> Maybe Code
 fromString = fromList . map digitToInt . selectDigits
