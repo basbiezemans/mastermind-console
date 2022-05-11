@@ -1,13 +1,24 @@
-module Result where
+module Result
+    ( Result (..)
+    , resultOf
+    , isCorrect
+    ) where
 
 import Code (Code, Guess, unGuess)
+import Utils ((.:))
 
 data Result = Correct | InCorrect
     deriving (Show)
 
+result :: Bool -> Result
+result True  = Correct
+result False = InCorrect
+
+equal :: Guess -> Code -> Bool
+equal = (==) . unGuess
+
 resultOf :: Guess -> Code -> Result
-resultOf guess code =
-    if unGuess guess == code then Correct else InCorrect
+resultOf = result .: equal
 
 isCorrect :: Result -> Bool
 isCorrect Correct   = True
