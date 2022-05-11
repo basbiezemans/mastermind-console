@@ -51,10 +51,8 @@ makeGame _code _config _score = Game
     }
 
 update :: Game -> Result -> Game
-update game result =
-    case result of
-        Correct -> addCodeBreakerPoint game
-        InCorrect -> addCodeMakerPoint game
+update game Correct = addCodeBreakerPoint game
+update game InCorrect = addCodeMakerPoint game
 
 endOf :: Game -> Bool
 endOf = (==) <$> view (config . limit)
