@@ -65,10 +65,10 @@ newGame limit = do
 newline :: IO ()
 newline = putChar '\n'
 
-askCode :: String -> IO (Maybe Code)
-askCode question = do
+askCode :: IO (Maybe Code)
+askCode = do
     newline
-    putStr question
+    putStr "Guess: "
     hFlush stdout
     Code.fromString <$> getLine
 
@@ -80,10 +80,8 @@ generateCode = do
 
 play :: Game -> IO ()
 play game = do
-    guess <- askCode "Guess: "
-    case guess of
-        Nothing -> explain game
-        Just code -> continue game (Guess code)
+    askCode >>= maybe (explain game)
+                      (continue game . Guess)
 
 continue :: Game -> Guess -> IO ()
 continue game guess = do
