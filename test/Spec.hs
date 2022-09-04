@@ -119,6 +119,7 @@ main = runTestTT $ TestList
     , testHint_Duplicate_Digits_No2
     , testHint_Duplicate_Digits_No3
     , testHint_Duplicate_Digits_No4
+    , testHint_Duplicate_Digits_No5
     , testMakeCode_Correct_No1
     , testMakeCode_Correct_No2
     , testMakeCode_Too_Short
