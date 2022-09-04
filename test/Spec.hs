@@ -55,6 +55,15 @@ testHint_Duplicate_Digits_No4 =
         ans   = "0"
         msg   = "Test Duplicate Digits #4"
 
+testHint_Duplicate_Digits_No5 :: Test
+testHint_Duplicate_Digits_No5 =
+    TestCase $ assertEqual msg ans $ mkHint code (Guess guess)
+    where
+        code  = mkCode 6 1 6 3
+        guess = mkCode 1 1 3 6
+        ans   = "1,0,0"
+        msg   = "Test Duplicate Digits #5"
+
 testMakeCode_Correct_No1 :: Test
 testMakeCode_Correct_No1 =
     TestCase $ assertEqual msg ans $ Code.fromString "1234"
