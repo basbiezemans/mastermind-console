@@ -107,10 +107,9 @@ recap result game = do
     askPlayAgain game
 
 showWinner :: Show a => Result -> a -> IO ()
-showWinner result answer =
-    putStrLn $ if isCorrect result then youWon else youLost
+showWinner Correct   _      = putStrLn "You won!"
+showWinner InCorrect answer = putStrLn youLost
   where
-    youWon = "You won!"
     youLost = "You lost. The answer was " ++ show answer
 
 askPlayAgain :: Game -> IO ()
