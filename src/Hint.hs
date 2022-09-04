@@ -3,7 +3,7 @@ module Hint
     , makeHint
     ) where
 
-import Data.List (intersperse, intersect)
+import Data.List (intersperse, delete)
 import Data.Char (intToDigit)
 import Code (Code, toList, Guess, unGuess)
 import Utils ((.:), both)
@@ -27,7 +27,17 @@ numCorrect :: Eq a => [(a, a)] -> Int
 numCorrect pairs = length pairs - length (unequal pairs)
 
 numPresent :: Eq a => [(a, a)] -> Int
-numPresent = length . uncurry intersect . unzip
+numPresent pairs =
+    fst $ foldr countNumPresent (0, xs) ys
+    where
+        (xs, ys) = unzip pairs
+
+countNumPresent :: Eq a => a -> (Int, [a]) -> (Int, [a])
+countNumPresent y (n, xs) =
+    if y `elem` xs then
+        (n + 1, delete y xs)
+    else
+        (n, xs)
 
 unequal :: Eq a => [(a, a)] -> [(a, a)]
 unequal = filter (uncurry (/=))
