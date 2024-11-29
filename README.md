@@ -3,24 +3,12 @@ Mastermind code-breaking game as a console application
 
 [Mastermind (board game), Wikipedia](https://en.wikipedia.org/wiki/Mastermind_(board_game))
 
-## Build and test
+## Run the game in a docker container
 ```bash
-$ stack build --test
+make docker
 ```
-
-## Install
-
-```bash
-$ stack install
-```
-
-Make sure that `~/.local/bin` or an equivalent thereof is in the PATH environment variable.
 
 ## Play the game
-
-```bash
-$ mastermind-console
-```
 
 The game has a minimal console user interface.
 ```
@@ -55,3 +43,30 @@ View all options:
 $ mastermind-console --help
 ```
 
+## Stack: build, test, and install
+
+Build a docker image.
+```bash
+make build
+```
+Run the container with an interactive shell.
+```bash
+make shell
+```
+
+Build and test the application.
+```bash
+stack build --test
+```
+
+Install the application.
+```bash
+stack install
+```
+
+Make sure that `~/.local/bin` or an equivalent thereof is in the PATH environment variable.
+
+Run the installed application.
+```bash
+mastermind-console
+```
