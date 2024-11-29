@@ -29,8 +29,8 @@ numCorrect pairs = length pairs - length (unequal pairs)
 numPresent :: Eq a => [(a, a)] -> Int
 numPresent pairs =
     fst $ foldr countNumPresent (0, xs) ys
-    where
-        (xs, ys) = unzip pairs
+  where
+    (xs, ys) = unzip pairs
 
 countNumPresent :: Eq a => a -> (Int, [a]) -> (Int, [a])
 countNumPresent y (n, xs) =
