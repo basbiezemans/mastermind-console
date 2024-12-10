@@ -59,6 +59,11 @@ Build and test the application.
 stack build --test
 ```
 
+Build and run the application.
+```bash
+stack run
+```
+
 Install the application.
 ```bash
 stack install
