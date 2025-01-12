@@ -10,15 +10,15 @@ import Utils ((.:))
 data Result = Correct | InCorrect
     deriving (Show)
 
-result :: Bool -> Result
-result True  = Correct
-result False = InCorrect
+fromBool :: Bool -> Result
+fromBool True  = Correct
+fromBool False = InCorrect
 
 equal :: Guess -> Code -> Bool
 equal = (==) . unGuess
 
 resultOf :: Guess -> Code -> Result
-resultOf = result .: equal
+resultOf = fromBool .: equal
 
 isCorrect :: Result -> Bool
 isCorrect Correct   = True
