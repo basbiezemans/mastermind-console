@@ -8,7 +8,7 @@ import Code (Code, Guess, unGuess)
 import Utils ((.:))
 
 data Result = Correct | InCorrect
-    deriving (Show)
+    deriving (Eq, Show)
 
 fromBool :: Bool -> Result
 fromBool True  = Correct
@@ -21,5 +21,4 @@ resultOf :: Guess -> Code -> Result
 resultOf = fromBool .: equal
 
 isCorrect :: Result -> Bool
-isCorrect Correct   = True
-isCorrect InCorrect = False
+isCorrect = (== Correct)
