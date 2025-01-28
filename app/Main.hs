@@ -23,14 +23,14 @@ parse :: [String] -> IO ()
 parse args = case args of
     []            -> newGame $ Limit 10
     ["-t", n]     -> newGame $ limitOr 10 (safeValue n)
-    ["-h"]        -> usage >> exit
+    ["-h"]        -> helptext >> exit
     ["-v"]        -> version >> exit
     ["--help"]    -> parse ["-h"]
     ["--version"] -> parse ["-v"]
     _             -> parse ["-h"]
 
-usage :: IO ()
-usage = do
+helptext :: IO ()
+helptext = do
     putStrLn "\nUsage: mastermind [-t NUMBER]"
     putStrLn "\nAvailable options:"
     putStrLn "  -h, --help         Show this help text"
